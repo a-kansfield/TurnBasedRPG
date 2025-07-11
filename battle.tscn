@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://duy2jqjxeqa0c"]
+
+[ext_resource type="PackedScene" uid="uid://clcyc6rspa7nf" path="res://enemy.tscn" id="1_ip7xm"]
+
+[node name="Battle" type="Node2D"]
+
+[node name="Enemy" parent="." groups=["enemies"] instance=ExtResource("1_ip7xm")]
+
+[node name="Enemy2" parent="." groups=["enemies"] instance=ExtResource("1_ip7xm")]
+position = Vector2(161, 1)
+
+[node name="Enemy3" parent="." groups=["enemies"] instance=ExtResource("1_ip7xm")]
+position = Vector2(322, 2)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EnemiesList" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 143.0
+grow_vertical = 0
