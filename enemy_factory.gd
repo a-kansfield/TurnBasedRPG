@@ -6,7 +6,6 @@ extends Node2D
 
 var enemyScene = preload("res://enemy.tscn")
 var allEnemies = preload("res://Data/EnemyData.tres")
-
 var rng = RandomNumberGenerator.new()
 
 const ENEMY_Y_SPACING : int = 180			# Multiplied by position to evenly space all enemies
