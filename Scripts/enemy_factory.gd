@@ -4,7 +4,7 @@ extends Node2D
 # Dependencies: A tres file holding a dictionary of all enemy types
 #				The Enemy Node scene
 #
-# TODO: Add labels for each enemy
+# TODO: Add labels for each enemy -- DONE
 # TODO: Handle enemy removal
 
 # Dependencies
@@ -14,10 +14,15 @@ var allEnemies = preload("res://Data/EnemyData.tres")
 # Constants
 var rng = RandomNumberGenerator.new()
 enum enemyChildren {SPRITE = 0, STATS = 1}	# Note: Adjust as children are added to Enemy.tscn
-const ENEMY_Y_SPACING : int = 180			# Multiplied by position to evenly space all enemies
+
+const ENEMY_Y_OFFSET : int = 180
+const ENEMY_Y_SPACING : int = 200			# Multiplied by position to evenly space all enemies
+const ENEMY_X_OFFSET : int = -150
+
+@onready var VIEW_WIDTH : int = get_window().size[0]
 
 # Signals
-#signal enemySpawned(instance : Variant)
+signal enemySpawned(instance : Variant, enemyChildren)
 
 func _init():
 	pass
@@ -26,6 +31,7 @@ func _init():
 func _ready():
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
 	placeEnemies(enemyNum)
+	
 	
 
 
@@ -41,13 +47,15 @@ func placeEnemies(enemyNum : int):
 		inst = generateEnemyType(inst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
 		#print(inst.get_child(enemyChildren.STATS).eName)
 		add_child(inst)
-		#enemySpawned.emit(inst)
+		
+		enemySpawned.emit(inst, enemyChildren)
 
 
 
 func setPosition(pos : int) -> Variant:
 	var inst = enemyScene.instantiate()
-	inst.position.y = pos * ENEMY_Y_SPACING
+	inst.position.y = (pos * ENEMY_Y_SPACING) + ENEMY_Y_OFFSET
+	inst.position.x = VIEW_WIDTH + ENEMY_X_OFFSET
 	return inst
 
 # Uses dictionary from EnemyData to randomly select an enemy type - then instantiates
