@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://clcyc6rspa7nf"]
+
+[ext_resource type="Script" uid="uid://jcvs0h5jbyjc" path="res://Scripts/enemy.gd" id="1_287tu"]
+[ext_resource type="Texture2D" uid="uid://c6wc1qcj47ekb" path="res://Sprites/icon.svg" id="2_0830c"]
+[ext_resource type="Script" uid="uid://bn4dv335l824a" path="res://Scripts/enemySpr.gd" id="3_ghaa6"]
+[ext_resource type="Script" uid="uid://b2d3uudgr2u5j" path="res://Scripts/stats_module.gd" id="4_1dp5w"]
+
+[node name="Enemy" type="Node2D"]
+script = ExtResource("1_287tu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(89, 89)
+texture = ExtResource("2_0830c")
+script = ExtResource("3_ghaa6")
+
+[node name="StatsModule" type="Node" parent="."]
+script = ExtResource("4_1dp5w")
+health = 30
+strength = 2
