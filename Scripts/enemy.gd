@@ -1,6 +1,6 @@
 extends Node2D
 
-var keyName : String = "Default-1"
+var keyName : String = "Default"
 
 
 func _ready():

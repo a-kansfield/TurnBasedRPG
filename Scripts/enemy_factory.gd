@@ -4,7 +4,7 @@ extends Node2D
 # Including 
 
 
-var enemyScene = preload("res://enemy.tscn")
+var enemyScene = preload("res://Scenes/enemy.tscn")
 var allEnemies = preload("res://Data/EnemyData.tres")
 var rng = RandomNumberGenerator.new()
 
