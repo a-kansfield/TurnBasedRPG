@@ -1,14 +1,23 @@
 extends Node2D
 ############################################################
 # Handles the creation of enemies at battle start.
-# Including 
+# Dependencies: A tres file holding a dictionary of all enemy types
+#				The Enemy Node scene
+#
+# TODO: Add labels for each enemy
+# TODO: Handle enemy removal
 
-
+# Dependencies
 var enemyScene = preload("res://Scenes/enemy.tscn")
 var allEnemies = preload("res://Data/EnemyData.tres")
-var rng = RandomNumberGenerator.new()
 
+# Constants
+var rng = RandomNumberGenerator.new()
+enum enemyChildren {SPRITE = 0, STATS = 1}	# Note: Adjust as children are added to Enemy.tscn
 const ENEMY_Y_SPACING : int = 180			# Multiplied by position to evenly space all enemies
+
+# Signals
+#signal enemySpawned(instance : Variant)
 
 func _init():
 	pass
@@ -16,33 +25,41 @@ func _init():
 	
 func _ready():
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
-	for i in range(enemyNum):				# Cycle through and place enemies
-		var inst = positionEnemy(i)			# Instantiate enemy positions
-		inst = generateEnemyType(inst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
-		print(inst.get_child(1).eName)
-		add_child(inst)
-		#print(inst.keyName)
+	placeEnemies(enemyNum)
 	
 
-	
-#Generate number of enemies
+
+# Generate number of enemies
 func generateNumOfEnemies() -> int: 
 	return rng.randi_range(1,3)
-	
-func positionEnemy(pos : int) -> Variant:
+
+
+# Cycle through enemy positions to generate a random enemy from the dictionary list of all enemies, then instantiate
+func placeEnemies(enemyNum : int):
+	for i in range(enemyNum):
+		var inst = setPosition(i)
+		inst = generateEnemyType(inst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
+		#print(inst.get_child(enemyChildren.STATS).eName)
+		add_child(inst)
+		#enemySpawned.emit(inst)
+
+
+
+func setPosition(pos : int) -> Variant:
 	var inst = enemyScene.instantiate()
 	inst.position.y = pos * ENEMY_Y_SPACING
-	
-	#add_child(inst)
 	return inst
 
+# Uses dictionary from EnemyData to randomly select an enemy type - then instantiates
 func generateEnemyType(inst : Variant) -> Variant:
-	var keys = allEnemies.EnemyTable.keys() 				# Get all keys in dictionary
+	var keys = allEnemies.EnemyTable.keys() 					# Get all keys in dictionary
 	var enemyKey = keys[rng.randi_range(0, (keys.size()) -1)]	# Key for the specific enemy generated
-	var stats = inst.get_child(1)
-	var spr = inst.get_child(0)
-	inst.keyName = enemyKey									# Set the instances keyName
 	
+	# Name Enemy Children
+	var spr = inst.get_child(enemyChildren.SPRITE)
+	var stats = inst.get_child(enemyChildren.STATS)
+	
+	inst.keyName = enemyKey
 	
 	# Set Enemy Stats
 	stats.eName = allEnemies.EnemyTable[enemyKey].name
