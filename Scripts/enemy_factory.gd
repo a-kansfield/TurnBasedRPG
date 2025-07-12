@@ -11,6 +11,7 @@ extends Node2D
 var enemyScene = preload("res://Scenes/enemy.tscn")
 var allEnemies = preload("res://Data/EnemyData.tres")
 
+
 # Constants
 var rng = RandomNumberGenerator.new()
 enum enemyChildren {SPRITE = 0, STATS = 1}	# Note: Adjust as children are added to Enemy.tscn
@@ -45,10 +46,9 @@ func placeEnemies(enemyNum : int):
 	for i in range(enemyNum):
 		var inst = setPosition(i)
 		inst = generateEnemyType(inst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
-		#print(inst.get_child(enemyChildren.STATS).eName)
 		add_child(inst)
-		
 		enemySpawned.emit(inst, enemyChildren)
+		
 
 
 
@@ -78,5 +78,9 @@ func generateEnemyType(inst : Variant) -> Variant:
 	return inst
 	
 		
+func _on_enemy_button_button_up(keyName):
+	print("Keyname from Enemy Factory: ", keyName)
 	
+	
+
 	

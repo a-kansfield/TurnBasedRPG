@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://b2k2kwyhxrnbb"]
+[gd_scene load_steps=2 format=3 uid="uid://b2k2kwyhxrnbb"]
+
+[ext_resource type="Script" uid="uid://cu8ijnirvdgly" path="res://Scenes/enemy_button.gd" id="1_4fcd6"]
 
 [node name="EnemyButton" type="Button"]
 anchors_preset = 15
@@ -7,3 +9,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Default"
+script = ExtResource("1_4fcd6")
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

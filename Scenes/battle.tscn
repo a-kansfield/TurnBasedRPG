@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://duy2jqjxeqa0c"]
+[gd_scene load_steps=4 format=3 uid="uid://duy2jqjxeqa0c"]
 
+[ext_resource type="Script" uid="uid://1lkwg6pkowf1" path="res://Scenes/battle.gd" id="1_1ruyk"]
 [ext_resource type="PackedScene" uid="uid://b8u7dwc02trdi" path="res://Scenes/enemy_factory.tscn" id="1_w7k78"]
 [ext_resource type="Script" uid="uid://cnjafj8tql0qu" path="res://Scripts/enemies_ui.gd" id="2_oxf17"]
 
 [node name="Battle" type="Node2D"]
+script = ExtResource("1_1ruyk")
 
 [node name="EnemyFactory" parent="." instance=ExtResource("1_w7k78")]
 
