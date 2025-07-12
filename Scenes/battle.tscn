@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://duy2jqjxeqa0c"]
 
-[ext_resource type="Script" uid="uid://1lkwg6pkowf1" path="res://Scenes/battle.gd" id="1_1ruyk"]
+[ext_resource type="Script" uid="uid://1lkwg6pkowf1" path="res://Scripts/battle.gd" id="1_1ruyk"]
 [ext_resource type="PackedScene" uid="uid://b8u7dwc02trdi" path="res://Scenes/enemy_factory.tscn" id="1_w7k78"]
 [ext_resource type="Script" uid="uid://cnjafj8tql0qu" path="res://Scripts/enemies_ui.gd" id="2_oxf17"]
 
@@ -38,4 +38,4 @@ theme_override_constants/separation = 10
 alignment = 2
 script = ExtResource("2_oxf17")
 
-[connection signal="enemySpawned" from="EnemyFactory" to="CanvasLayer/Control/MarginContainer/EnemiesList" method="_on_enemy_factory_enemy_spawned"]
+[connection signal="ready" from="." to="EnemyFactory" method="_on_battle_ready"]

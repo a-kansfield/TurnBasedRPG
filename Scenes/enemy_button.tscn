@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b2k2kwyhxrnbb"]
 
-[ext_resource type="Script" uid="uid://cu8ijnirvdgly" path="res://Scenes/enemy_button.gd" id="1_4fcd6"]
+[ext_resource type="Script" uid="uid://cu8ijnirvdgly" path="res://Scripts/enemy_button.gd" id="1_4fcd6"]
 
 [node name="EnemyButton" type="Button"]
 anchors_preset = 15

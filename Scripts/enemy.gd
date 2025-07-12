@@ -1,7 +1,7 @@
 extends Node2D
 
 var keyName : String = "Default"
-
+var id : int
 
 func _ready():
 	pass
