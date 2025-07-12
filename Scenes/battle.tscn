@@ -1,16 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://duy2jqjxeqa0c"]
+[gd_scene load_steps=3 format=3 uid="uid://duy2jqjxeqa0c"]
 
-[ext_resource type="PackedScene" uid="uid://clcyc6rspa7nf" path="res://Scenes/enemy.tscn" id="1_w7k78"]
+[ext_resource type="PackedScene" uid="uid://b8u7dwc02trdi" path="res://Scenes/enemy_factory.tscn" id="1_w7k78"]
+[ext_resource type="Script" uid="uid://cnjafj8tql0qu" path="res://Scripts/enemies_ui.gd" id="2_oxf17"]
 
 [node name="Battle" type="Node2D"]
 
-[node name="Enemy" parent="." groups=["enemies"] instance=ExtResource("1_w7k78")]
-
-[node name="Enemy2" parent="." groups=["enemies"] instance=ExtResource("1_w7k78")]
-position = Vector2(161, 1)
-
-[node name="Enemy3" parent="." groups=["enemies"] instance=ExtResource("1_w7k78")]
-position = Vector2(322, 2)
+[node name="EnemyFactory" parent="." instance=ExtResource("1_w7k78")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -22,11 +17,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="EnemiesList" type="VBoxContainer" parent="CanvasLayer/Control"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -23.0
-offset_right = 143.0
+offset_top = -191.0
+offset_right = 272.0
 grow_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="EnemiesList" type="VBoxContainer" parent="CanvasLayer/Control/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+script = ExtResource("2_oxf17")
+
+[connection signal="enemySpawned" from="EnemyFactory" to="CanvasLayer/Control/MarginContainer/EnemiesList" method="_on_enemy_factory_enemy_spawned"]
