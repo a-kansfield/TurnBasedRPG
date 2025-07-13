@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://clcyc6rspa7nf"]
+[gd_scene load_steps=6 format=3 uid="uid://clcyc6rspa7nf"]
 
 [ext_resource type="Script" uid="uid://jcvs0h5jbyjc" path="res://Scripts/enemy.gd" id="1_287tu"]
 [ext_resource type="Texture2D" uid="uid://c6wc1qcj47ekb" path="res://Sprites/icon.svg" id="2_0830c"]
 [ext_resource type="Script" uid="uid://bn4dv335l824a" path="res://Scripts/enemySpr.gd" id="3_ghaa6"]
 [ext_resource type="Script" uid="uid://b2d3uudgr2u5j" path="res://Scripts/stats_module.gd" id="4_1dp5w"]
+[ext_resource type="PackedScene" uid="uid://dbw4fnb5j0eys" path="res://Scenes/health_module.tscn" id="5_0830c"]
 
 [node name="Enemy" type="Node2D"]
 script = ExtResource("1_287tu")
@@ -15,5 +16,6 @@ script = ExtResource("3_ghaa6")
 
 [node name="StatsModule" type="Node" parent="."]
 script = ExtResource("4_1dp5w")
-health = 30
 strength = 2
+
+[node name="HealthModule" parent="." instance=ExtResource("5_0830c")]
