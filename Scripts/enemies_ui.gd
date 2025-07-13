@@ -25,15 +25,9 @@ func _on_enemy_spawned(instance, pos, enemyChildren):
 	# Alter Button Aspects
 	btn.text = instance.get_child(enemyChildren.STATS).eName
 	btn.keyName = instance.keyName
-	btn.id = pos
+	btn.pos = pos
 	
 	enemyKeys.append(btn.keyName)
-	print(enemyKeys)
-	
-	# Connect button to both enemy list and enemy factory.
-	#TODO: Set up a hub for this because this is a nightmare
-	#btn.connect("enemy_button_button_up", _on_enemy_button_button_up)
-	#btn.connect("enemy_button_button_up", $"../../../../EnemyFactory"._on_enemy_button_button_up) # This sucks ass don't do this
 	
 	add_child(btn)
 

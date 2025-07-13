@@ -3,19 +3,21 @@ extends Node2D
 # Handles the creation of enemies at battle start.
 # Dependencies: A tres file holding a dictionary of all enemy types
 #				The Enemy Node scene
+				
 #
-# TODO: Add labels for each enemy -- DONE
-# TODO: Handle enemy removal
-# TODO: Realization: Dictionary keys wont be enough because there can be multiple of the same type of enemy. Will need to add an array of unique references.
-# TODO: Currently - the enemies are spawning before the UI has a chance to connect via signal. I may want to look other solutions (Another signal to emit once everything is loaded?)
-# Dependencies
+# TODO: (Potentially) Look into centralizing enemy removal? As of right now I'm essentially doing two near identical functions at the same time which doesn't feel ideal.
+#		Maybe an enemy removal service node that calls removal from the same place?
+
+# TODO: Make labels more detailed to show enemy health
+# TODO: Adjust buttons to do damage instead of one-click destroy
+
 var enemyScene = preload("res://Scenes/enemy.tscn")
 var enemyData = preload("res://Data/EnemyData.tres")
 
 
 # Constants
 var rng = RandomNumberGenerator.new()
-enum enemyChildren {SPRITE = 0, STATS = 1}	# Note: Adjust as children are added to Enemy.tscn
+enum enemyChildren {SPRITE = 0, STATS = 1, HEALTH = 2}	# Note: Adjust as children are added to Enemy.tscn
 
 const ENEMY_Y_OFFSET : int = 180
 const ENEMY_Y_SPACING : int = 200			# Multiplied by position to evenly space all enemies
@@ -33,22 +35,20 @@ func _init():
 	
 func _ready():
 	# Set Signals
-	SignalBus.enemyDestroyed.connect(_on_enemy_destroyed)
+	SignalBus.entityDestroyed.connect(_on_enemy_destroyed)
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
 	placeEnemies(enemyNum)
 	
-
 # Generate number of enemies
 func generateNumOfEnemies() -> int: 
 	return rng.randi_range(1,3)
-
 
 # Cycle through enemy positions to generate a random enemy from the dictionary list of all enemies, then instantiate
 func placeEnemies(enemyNum : int):
 	for i in range(enemyNum):
 		var inst = setPosition(i)
 		inst = generateEnemyType(inst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
-		inst.id = i
+		inst.pos = i
 		#Add unique references to Enemies
 		startingEnemies.append(inst)
 		activeEnemies.append(inst)	
@@ -56,9 +56,6 @@ func placeEnemies(enemyNum : int):
 		SignalBus.enemySpawned.emit(inst, i, enemyChildren) # 
 		add_child(inst)
 		
-		
-
-
 # Sets the x and y value of the enemy
 func setPosition(pos : int) -> Variant:
 	var inst = enemyScene.instantiate()
@@ -74,13 +71,20 @@ func generateEnemyType(inst : Variant) -> Variant:
 	# Store Enemy Children
 	var spr = inst.get_child(enemyChildren.SPRITE)
 	var stats = inst.get_child(enemyChildren.STATS)
+	var health = inst.get_child(enemyChildren.HEALTH)
 	
 	inst.keyName = enemyKey
 	
 	# Set Enemy Stats
 	stats.eName = enemyData.EnemyTable[enemyKey].name
 	stats.strength = enemyData.EnemyTable[enemyKey].strength
-	stats.health = enemyData.EnemyTable[enemyKey].health
+	stats.health = enemyData.EnemyTable[enemyKey].health	# Note: May not need in the future, but for now I like having it here still
+	
+	# Set Enemy Health
+	health.totalHealth = enemyData.EnemyTable[enemyKey].health
+	health.currentHealth = health.totalHealth
+	
+	# Set Enemy hue
 	spr.color = enemyData.EnemyTable[enemyKey].color
 	
 	return inst

@@ -1,28 +1,22 @@
 extends Button
 
 var keyName : String
-var id : int
+var pos : int
 
 var enemyFactoryScript = preload("res://Scripts/enemy_factory.gd")
 
 signal enemy_button_button_up(key)
 
 func _ready():
-	SignalBus.enemyDestroyed.connect(remove)
-	
-	
-	print(enemyFactoryScript.ENEMY_Y_OFFSET)
+	SignalBus.entityDestroyed.connect(remove)
 
 func _on_button_up():
-	enemy_button_button_up.emit(keyName)
+	#enemy_button_button_up.emit(keyName)
 	
-	SignalBus.enemyDestroyed.emit(id)
-	print("Keyname from Enemy Button: ", keyName)
-	print("ID from Enemy Button: ", id)
+	SignalBus.changeEntityHealth.emit(pos, -2)
 	pass # Replace with function body.
 
-func remove(id):
+func remove(pos):
 	
-	if self.id == id:
-		print("Enemy Removed")
+	if self.pos == pos:
 		queue_free()

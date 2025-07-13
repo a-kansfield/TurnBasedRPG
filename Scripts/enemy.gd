@@ -1,11 +1,16 @@
 extends Node2D
 
 var keyName : String = "Default"
-var id : int
+var pos : int
+
 
 func _ready():
-	pass
+	SignalBus.entityDestroyed.connect(destroySelf)
+	
 
+func destroySelf(pos):
+	if self.pos == pos:
+		queue_free()
 
 # Unused - with a random number generator it can modulate the sprite color
 #func randomColorGen(rng : RandomNumberGenerator):
