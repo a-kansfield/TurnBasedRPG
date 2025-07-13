@@ -1,13 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://duy2jqjxeqa0c"]
+[gd_scene load_steps=5 format=3 uid="uid://duy2jqjxeqa0c"]
 
 [ext_resource type="Script" uid="uid://1lkwg6pkowf1" path="res://Scripts/battle.gd" id="1_1ruyk"]
 [ext_resource type="PackedScene" uid="uid://b8u7dwc02trdi" path="res://Scenes/enemy_factory.tscn" id="1_w7k78"]
 [ext_resource type="Script" uid="uid://cnjafj8tql0qu" path="res://Scripts/enemies_ui.gd" id="2_oxf17"]
+[ext_resource type="PackedScene" uid="uid://pqa7t04pl1d5" path="res://Scenes/turn_controller.tscn" id="3_1otgo"]
 
 [node name="Battle" type="Node2D"]
 script = ExtResource("1_1ruyk")
 
 [node name="EnemyFactory" parent="." instance=ExtResource("1_w7k78")]
+
+[node name="TurnController" parent="." instance=ExtResource("3_1otgo")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
