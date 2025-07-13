@@ -10,3 +10,5 @@ signal battleInitComplete(activeEnemies)
 
 signal entityDestroyed(charPos : int)
 signal changeEntityHealth(charPos : int, amount : int)
+
+signal projectCurrentHealth(charPos: int, currentHealth : int)

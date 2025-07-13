@@ -18,4 +18,6 @@ func changeHealth(pos: int, amount : int):
 			currentHealth = 0
 			# Destroy parent
 			SignalBus.entityDestroyed.emit(get_parent().pos)
+		else:
+			SignalBus.projectCurrentHealth.emit(pos, currentHealth)
 		print(currentHealth)

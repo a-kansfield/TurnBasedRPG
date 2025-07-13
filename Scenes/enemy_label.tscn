@@ -1,14 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://77swp2cqcm3l"]
+[gd_scene load_steps=3 format=3 uid="uid://77swp2cqcm3l"]
 
-[ext_resource type="Script" uid="uid://dqj4asxl7csd2" path="res://Scenes/enemy_label.gd" id="1_17hcc"]
+[ext_resource type="Script" uid="uid://dqj4asxl7csd2" path="res://Scripts/enemy_label.gd" id="1_17hcc"]
+[ext_resource type="Script" uid="uid://1hnx1jw607h8" path="res://Scripts/current_health.gd" id="2_72dul"]
 
 [node name="EnemyLabel" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -877.0
-offset_bottom = -603.0
+anchor_right = 0.239
+anchor_bottom = 0.069
+offset_right = -0.328003
+offset_bottom = 0.287994
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_17hcc")
@@ -28,23 +28,24 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="LabelContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="EnemyName" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="EnemyName" type="Label" parent="PanelContainer/MarginContainer/LabelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Default"
 
-[node name="CurrentHealth" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="CurrentHealth" type="Label" parent="PanelContainer/MarginContainer/LabelContainer"]
 layout_mode = 2
 text = "95"
+script = ExtResource("2_72dul")
 
-[node name="Slash" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Slash" type="Label" parent="PanelContainer/MarginContainer/LabelContainer"]
 layout_mode = 2
 text = "/"
 
-[node name="TotalHealth" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="TotalHealth" type="Label" parent="PanelContainer/MarginContainer/LabelContainer"]
 layout_mode = 2
 text = "100"

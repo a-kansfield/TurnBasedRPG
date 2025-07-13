@@ -12,6 +12,7 @@ extends Node2D
 # TODO: Adjust buttons to do damage instead of one-click destroy
 
 var enemyScene = preload("res://Scenes/enemy.tscn")
+var enemyLabelScene = preload("res://Scenes/enemy_label.tscn")
 var enemyData = preload("res://Data/EnemyData.tres")
 
 
@@ -19,9 +20,10 @@ var enemyData = preload("res://Data/EnemyData.tres")
 var rng = RandomNumberGenerator.new()
 enum enemyChildren {SPRITE = 0, STATS = 1, HEALTH = 2}	# Note: Adjust as children are added to Enemy.tscn
 
-const ENEMY_Y_OFFSET : int = 180
-const ENEMY_Y_SPACING : int = 200			# Multiplied by position to evenly space all enemies
-const ENEMY_X_OFFSET : int = -150
+const ENTITY_Y_OFFSET : int = 180
+const ENTITY_Y_SPACING : int = 200			# Multiplied by position to evenly space all enemies
+const ENTITY_X_OFFSET : int = -150
+const LABEL_Y_OFFSET : int = 5
 
 @onready var VIEW_WIDTH : int = get_window().size[0]
 
@@ -34,8 +36,6 @@ func _init():
 	
 	
 func _ready():
-	# Set Signals
-	SignalBus.entityDestroyed.connect(_on_enemy_destroyed)
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
 	placeEnemies(enemyNum)
 	
@@ -45,23 +45,56 @@ func generateNumOfEnemies() -> int:
 
 # Cycle through enemy positions to generate a random enemy from the dictionary list of all enemies, then instantiate
 func placeEnemies(enemyNum : int):
+	
 	for i in range(enemyNum):
-		var inst = setPosition(i)
-		inst = generateEnemyType(inst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
-		inst.pos = i
-		#Add unique references to Enemies
-		startingEnemies.append(inst)
-		activeEnemies.append(inst)	
+		var enemyInst = enemyScene.instantiate()
+		enemyInst = setPosition(enemyInst, i, ENTITY_Y_SPACING, ENTITY_X_OFFSET, ENTITY_Y_OFFSET)
+		enemyInst = generateEnemyType(enemyInst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
+		enemyInst.pos = i
 		
-		SignalBus.enemySpawned.emit(inst, i, enemyChildren) # 
-		add_child(inst)
+		add_child(enemyInst)
 		
+		# Create Label
+		var labelInst = enemyLabelScene.instantiate()
+		labelInst = setPosition(
+			labelInst, i, 
+			ENTITY_Y_SPACING, 
+			ENTITY_X_OFFSET, ENTITY_Y_OFFSET + LABEL_Y_OFFSET
+		)
+		
+		# Set Label text
+		var spr = enemyInst.get_child(enemyChildren.SPRITE)
+		var stats = enemyInst.get_child(enemyChildren.STATS)
+		var health = enemyInst.get_child(enemyChildren.HEALTH)
+		
+		labelInst.pos = i
+		labelInst.totalHealth = health.totalHealth
+		labelInst.currentHealth = health.currentHealth
+		labelInst.entityName = stats.eName
+		
+		add_child(labelInst)
+		
+		SignalBus.enemySpawned.emit(enemyInst, i, enemyChildren)
+		
+		#Add unique references to Enemies (Currently unused but maybe necessary later)
+		startingEnemies.append(enemyInst)
+		activeEnemies.append(enemyInst)	
+		
+
 # Sets the x and y value of the enemy
-func setPosition(pos : int) -> Variant:
-	var inst = enemyScene.instantiate()
-	inst.position.y = (pos * ENEMY_Y_SPACING) + ENEMY_Y_OFFSET
-	inst.position.x = VIEW_WIDTH + ENEMY_X_OFFSET
-	return inst
+func setPosition(entity : Variant, pos : int, Y_SPACING : int, X_OFFSET : int,  Y_OFFSET : int ) -> Variant:
+	#var inst = enemyScene.instantiate()
+	entity.position.y = (pos * Y_SPACING) + Y_OFFSET
+	entity.position.x = VIEW_WIDTH + X_OFFSET
+	return entity
+
+# Sets the x and y value of the label (Note: can easily be refactored to include set enemy position - but I will hold off for now)
+#func setLabelPosition(pos : int):
+	#
+	#var LABEL_OFFSET = 0
+	#label.position.y = (pos * ENEMY_Y_SPACING) + ENEMY_Y_OFFSET + LABEL_OFFSET
+	#label.position.x = VIEW_WIDTH + ENEMY_X_OFFSET
+	#return label
 
 # Uses dictionary from EnemyData to randomly select an enemy type - then instantiates
 func generateEnemyType(inst : Variant) -> Variant:
@@ -89,9 +122,6 @@ func generateEnemyType(inst : Variant) -> Variant:
 	
 	return inst
 	
-func _on_enemy_destroyed(enemyPos : int):
-	pass
-
 # Only runs once everything is loaded
 func _on_battle_ready():
 	#var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
