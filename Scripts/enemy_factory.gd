@@ -18,7 +18,7 @@ var enemyData = preload("res://Data/EnemyData.tres")
 
 # Constants
 var rng = RandomNumberGenerator.new()
-enum enemyChildren {SPRITE = 0, STATS = 1, HEALTH = 2}	# Note: Adjust as children are added to Enemy.tscn
+
 
 const ENTITY_Y_OFFSET : int = 180
 const ENTITY_Y_SPACING : int = 200			# Multiplied by position to evenly space all enemies
@@ -38,6 +38,10 @@ func _init():
 func _ready():
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
 	placeEnemies(enemyNum)
+	
+	SignalBus.battleInitComplete.emit(startingEnemies)
+	
+	
 	
 # Generate number of enemies
 func generateNumOfEnemies() -> int: 
@@ -63,9 +67,9 @@ func placeEnemies(enemyNum : int):
 		)
 		
 		# Set Label text
-		var spr = enemyInst.get_child(enemyChildren.SPRITE)
-		var stats = enemyInst.get_child(enemyChildren.STATS)
-		var health = enemyInst.get_child(enemyChildren.HEALTH)
+		var spr = enemyInst.get_child(Constants.enemyChildren.SPRITE)
+		var stats = enemyInst.get_child(Constants.enemyChildren.STATS)
+		var health = enemyInst.get_child(Constants.enemyChildren.HEALTH)
 		
 		labelInst.pos = i
 		labelInst.totalHealth = health.totalHealth
@@ -74,7 +78,7 @@ func placeEnemies(enemyNum : int):
 		
 		add_child(labelInst)
 		
-		SignalBus.enemySpawned.emit(enemyInst, i, enemyChildren)
+		SignalBus.enemySpawned.emit(enemyInst, i)
 		
 		#Add unique references to Enemies (Currently unused but maybe necessary later)
 		startingEnemies.append(enemyInst)
@@ -102,9 +106,9 @@ func generateEnemyType(inst : Variant) -> Variant:
 	var enemyKey = keys[rng.randi_range(0, (keys.size()) -1)]	# Key for the specific enemy generated
 	
 	# Store Enemy Children
-	var spr = inst.get_child(enemyChildren.SPRITE)
-	var stats = inst.get_child(enemyChildren.STATS)
-	var health = inst.get_child(enemyChildren.HEALTH)
+	var spr = inst.get_child(Constants.enemyChildren.SPRITE)
+	var stats = inst.get_child(Constants.enemyChildren.STATS)
+	var health = inst.get_child(Constants.enemyChildren.HEALTH)
 	
 	inst.keyName = enemyKey
 	
@@ -112,7 +116,7 @@ func generateEnemyType(inst : Variant) -> Variant:
 	stats.eName = enemyData.EnemyTable[enemyKey].name
 	stats.strength = enemyData.EnemyTable[enemyKey].strength
 	stats.health = enemyData.EnemyTable[enemyKey].health	# Note: May not need in the future, but for now I like having it here still
-	
+	stats.dexterity = enemyData.EnemyTable[enemyKey].dexterity
 	# Set Enemy Health
 	health.totalHealth = enemyData.EnemyTable[enemyKey].health
 	health.currentHealth = health.totalHealth

@@ -4,8 +4,8 @@ var enemyData = preload("res://Data/EnemyData.tres")
 
 signal attackEnemy
 
-signal enemySpawned(inst, pos, enemyChildren) #inst, pos, enemyChildren
-signal battleInitComplete(activeEnemies)
+signal enemySpawned(inst, pos) #inst, pos, enemyChildren
+signal battleInitComplete(activeEnemies : Array)
 
 
 signal entityDestroyed(charPos : int)

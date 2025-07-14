@@ -5,6 +5,7 @@ var pos : int
 
 
 func _ready():
+	
 	SignalBus.entityDestroyed.connect(destroySelf)
 	
 
