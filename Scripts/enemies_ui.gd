@@ -19,7 +19,6 @@ func _ready():
 
 # Signal from Enemy Factory - creates a button that matches the generated enemy
 func _on_enemy_spawned(instance, pos):
-	print("On Enemy Spawned Working")
 	var btn = enemyButtonScene.instantiate()
 	
 	# Alter Button Aspects
