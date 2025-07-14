@@ -5,6 +5,8 @@ var enemyData = preload("res://Data/EnemyData.tres")
 signal attackEnemy
 
 signal enemySpawned(inst, pos) #inst, pos, enemyChildren
+
+signal playerInitComplete(lastPos : int)
 signal battleInitComplete(activeEnemies : Array)
 
 

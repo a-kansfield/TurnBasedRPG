@@ -23,10 +23,12 @@ var activeEntites : Array
 
 func _ready():
 	placePlayers()
+	SignalBus.playerInitComplete.emit(NUM_PARTY_MEMBERS)
 	
 func placePlayers():
 	for i in range(NUM_PARTY_MEMBERS):
 		var entityInst = playerCharScene.instantiate()
+		entityInst.pos = i
 		entityInst = setPosition(entityInst, i, ENTITY_Y_SPACING, ENTITY_X_OFFSET, ENTITY_Y_OFFSET)
 		setStats(entityInst, i)
 		add_child(entityInst)
@@ -49,6 +51,8 @@ func placePlayers():
 		
 		
 		add_child(labelInst)
+		
+		
 		print(i)
 	pass
 
