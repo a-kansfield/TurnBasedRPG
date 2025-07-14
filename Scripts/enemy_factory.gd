@@ -12,7 +12,7 @@ extends Node2D
 # TODO: Adjust buttons to do damage instead of one-click destroy
 
 var enemyScene = preload("res://Scenes/enemy.tscn")
-var enemyLabelScene = preload("res://Scenes/enemy_label.tscn")
+var enemyLabelScene = preload("res://Scenes/entity_label.tscn")
 var enemyData = preload("res://Data/EnemyData.tres")
 
 
@@ -25,36 +25,47 @@ const ENTITY_Y_SPACING : int = 200			# Multiplied by position to evenly space al
 const ENTITY_X_OFFSET : int = -150
 const LABEL_Y_OFFSET : int = 5
 
-@onready var VIEW_WIDTH : int = get_window().size[0]
+#NOTE: onready wouldn't show up in time for setPosition, causing enemies to spawn off the screen. Current fix is to instead get the view width withing setPosition
+var VIEW_WIDTH : int
 
 # Starting Enemies are kept track of to determine things like experience earned. Active is tracked separately and can also be considered "living" enemies
 var startingEnemies : Array
 var activeEnemies : Array
 
 func _init():
+	SignalBus.connect("playerInitComplete", createEnemies)
+	
 	pass
 	
 	
 func _ready():
+	#var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
+	#placeEnemies(enemyNum)
+	#
+	#SignalBus.battleInitComplete.emit(startingEnemies)
+	
+	pass
+
+	
+# Main function that serves as a jumping off point for everything else. 
+func createEnemies(lastPlayerPos : int):
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
-	placeEnemies(enemyNum)
+	placeEnemies(enemyNum, lastPlayerPos)
 	
 	SignalBus.battleInitComplete.emit(startingEnemies)
-	
-	
 	
 # Generate number of enemies
 func generateNumOfEnemies() -> int: 
 	return rng.randi_range(1,3)
 
 # Cycle through enemy positions to generate a random enemy from the dictionary list of all enemies, then instantiate
-func placeEnemies(enemyNum : int):
+func placeEnemies(enemyNum : int, lastPlayerPos : int):
 	
 	for i in range(enemyNum):
 		var enemyInst = enemyScene.instantiate()
 		enemyInst = setPosition(enemyInst, i, ENTITY_Y_SPACING, ENTITY_X_OFFSET, ENTITY_Y_OFFSET)
 		enemyInst = generateEnemyType(enemyInst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
-		enemyInst.pos = i
+		enemyInst.pos = lastPlayerPos + i
 		
 		add_child(enemyInst)
 		
@@ -67,18 +78,18 @@ func placeEnemies(enemyNum : int):
 		)
 		
 		# Set Label text
-		var spr = enemyInst.get_child(Constants.enemyChildren.SPRITE)
-		var stats = enemyInst.get_child(Constants.enemyChildren.STATS)
-		var health = enemyInst.get_child(Constants.enemyChildren.HEALTH)
+		var spr = enemyInst.get_child(Globals.enemyChildren.SPRITE)
+		var stats = enemyInst.get_child(Globals.enemyChildren.STATS)
+		var health = enemyInst.get_child(Globals.enemyChildren.HEALTH)
 		
-		labelInst.pos = i
+		labelInst.pos = lastPlayerPos + i
 		labelInst.totalHealth = health.totalHealth
 		labelInst.currentHealth = health.currentHealth
 		labelInst.entityName = stats.eName
 		
 		add_child(labelInst)
 		
-		SignalBus.enemySpawned.emit(enemyInst, i)
+		SignalBus.enemySpawned.emit(enemyInst, lastPlayerPos + i) # Goes to EnemiesList under UI
 		
 		#Add unique references to Enemies (Currently unused but maybe necessary later)
 		startingEnemies.append(enemyInst)
@@ -87,28 +98,21 @@ func placeEnemies(enemyNum : int):
 
 # Sets the x and y value of the enemy
 func setPosition(entity : Variant, pos : int, Y_SPACING : int, X_OFFSET : int,  Y_OFFSET : int ) -> Variant:
-	#var inst = enemyScene.instantiate()
+	VIEW_WIDTH = get_window().size[0] 	#NOTE: In the future this will be a global variable, but for right now it can stay here as the only thing that needs it.
+	
 	entity.position.y = (pos * Y_SPACING) + Y_OFFSET
 	entity.position.x = VIEW_WIDTH + X_OFFSET
 	return entity
 
-# Sets the x and y value of the label (Note: can easily be refactored to include set enemy position - but I will hold off for now)
-#func setLabelPosition(pos : int):
-	#
-	#var LABEL_OFFSET = 0
-	#label.position.y = (pos * ENEMY_Y_SPACING) + ENEMY_Y_OFFSET + LABEL_OFFSET
-	#label.position.x = VIEW_WIDTH + ENEMY_X_OFFSET
-	#return label
-
 # Uses dictionary from EnemyData to randomly select an enemy type - then instantiates
 func generateEnemyType(inst : Variant) -> Variant:
-	var keys = enemyData.EnemyTable.keys() 					# Get all keys in dictionary
+	var keys = enemyData.EnemyTable.keys() 						# Get all keys in dictionary
 	var enemyKey = keys[rng.randi_range(0, (keys.size()) -1)]	# Key for the specific enemy generated
 	
 	# Store Enemy Children
-	var spr = inst.get_child(Constants.enemyChildren.SPRITE)
-	var stats = inst.get_child(Constants.enemyChildren.STATS)
-	var health = inst.get_child(Constants.enemyChildren.HEALTH)
+	var spr = inst.get_child(Globals.enemyChildren.SPRITE)
+	var stats = inst.get_child(Globals.enemyChildren.STATS)
+	var health = inst.get_child(Globals.enemyChildren.HEALTH)
 	
 	inst.keyName = enemyKey
 	

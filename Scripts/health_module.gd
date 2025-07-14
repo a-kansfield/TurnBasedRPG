@@ -2,6 +2,7 @@ extends Node2D
 
 var totalHealth : int
 var currentHealth : int
+
 @onready var parent = get_parent()
 
 func _ready():

@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://ldoc3vsvle4m"]
+
+[ext_resource type="Texture2D" uid="uid://c6wc1qcj47ekb" path="res://Sprites/icon.svg" id="1_5a6af"]
+[ext_resource type="Script" uid="uid://n2ofao4lj1yh" path="res://Scenes/player_char.gd" id="1_vd8h2"]
+[ext_resource type="Script" uid="uid://b2d3uudgr2u5j" path="res://Scripts/stats_module.gd" id="2_vd8h2"]
+[ext_resource type="PackedScene" uid="uid://dbw4fnb5j0eys" path="res://Scenes/health_module.tscn" id="3_4a66o"]
+
+[node name="PlayerChar" type="Node2D"]
+script = ExtResource("1_vd8h2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -65)
+texture = ExtResource("1_5a6af")
+
+[node name="StatsModule" type="Node" parent="."]
+script = ExtResource("2_vd8h2")
+strength = 2
+
+[node name="HealthModule" parent="." instance=ExtResource("3_4a66o")]

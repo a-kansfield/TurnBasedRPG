@@ -22,7 +22,7 @@ func _on_enemy_spawned(instance, pos):
 	var btn = enemyButtonScene.instantiate()
 	
 	# Alter Button Aspects
-	btn.text = instance.get_child(Constants.enemyChildren.STATS).eName
+	btn.text = instance.get_child(Globals.enemyChildren.STATS).eName
 	btn.keyName = instance.keyName
 	btn.pos = pos
 	
