@@ -7,7 +7,7 @@ var totalHealth : int
 var currentHealth : int
 var entityName : String
 
-@onready var nameLabel = $PanelContainer/MarginContainer/LabelContainer/EnemyName
+@onready var nameLabel = $PanelContainer/MarginContainer/LabelContainer/EntityName
 @onready var currentHealthLabel = $PanelContainer/MarginContainer/LabelContainer/CurrentHealth
 @onready var totalHealthLabel = $PanelContainer/MarginContainer/LabelContainer/TotalHealth
 

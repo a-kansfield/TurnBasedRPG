@@ -12,7 +12,7 @@ extends Node2D
 # TODO: Adjust buttons to do damage instead of one-click destroy
 
 var enemyScene = preload("res://Scenes/enemy.tscn")
-var enemyLabelScene = preload("res://Scenes/enemy_label.tscn")
+var enemyLabelScene = preload("res://Scenes/entity_label.tscn")
 var enemyData = preload("res://Data/EnemyData.tres")
 
 
@@ -67,9 +67,9 @@ func placeEnemies(enemyNum : int):
 		)
 		
 		# Set Label text
-		var spr = enemyInst.get_child(Constants.enemyChildren.SPRITE)
-		var stats = enemyInst.get_child(Constants.enemyChildren.STATS)
-		var health = enemyInst.get_child(Constants.enemyChildren.HEALTH)
+		var spr = enemyInst.get_child(Globals.enemyChildren.SPRITE)
+		var stats = enemyInst.get_child(Globals.enemyChildren.STATS)
+		var health = enemyInst.get_child(Globals.enemyChildren.HEALTH)
 		
 		labelInst.pos = i
 		labelInst.totalHealth = health.totalHealth
@@ -106,9 +106,9 @@ func generateEnemyType(inst : Variant) -> Variant:
 	var enemyKey = keys[rng.randi_range(0, (keys.size()) -1)]	# Key for the specific enemy generated
 	
 	# Store Enemy Children
-	var spr = inst.get_child(Constants.enemyChildren.SPRITE)
-	var stats = inst.get_child(Constants.enemyChildren.STATS)
-	var health = inst.get_child(Constants.enemyChildren.HEALTH)
+	var spr = inst.get_child(Globals.enemyChildren.SPRITE)
+	var stats = inst.get_child(Globals.enemyChildren.STATS)
+	var health = inst.get_child(Globals.enemyChildren.HEALTH)
 	
 	inst.keyName = enemyKey
 	

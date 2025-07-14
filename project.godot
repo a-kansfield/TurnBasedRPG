@@ -17,7 +17,7 @@ config/icon="res://Sprites/icon.svg"
 [autoload]
 
 SignalBus="*res://Autoload/SignalBus/signal_bus.gd"
-Constants="*res://Autoload/Constants/Constants.gd"
+Globals="*res://Autoload/Globals/Globals.gd"
 
 [editor]
 
