@@ -2,7 +2,11 @@ extends Node
 
 var enemyData = preload("res://Data/EnemyData.tres")
 
-signal attackEnemy
+
+
+# SIGNALS BATTLE
+signal playerTurn(activeEntity)
+signal enemyTurn(activeEntity)
 
 signal enemySpawned(inst, pos) #inst, pos, enemyChildren
 

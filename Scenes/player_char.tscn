@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://b2d3uudgr2u5j" path="res://Scripts/stats_module.gd" id="2_vd8h2"]
 [ext_resource type="PackedScene" uid="uid://dbw4fnb5j0eys" path="res://Scenes/health_module.tscn" id="3_4a66o"]
 
-[node name="PlayerChar" type="Node2D"]
+[node name="PlayerChar" type="Node2D" groups=["player"]]
 script = ExtResource("1_vd8h2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

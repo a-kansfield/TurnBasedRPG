@@ -1,10 +1,18 @@
 extends Node2D
 
+enum AFFILIATIONS {
+	PLAYER,
+	ENEMY
+}
+
+
 var activeEnemies : Array
 var activePlayers : Array
 var activeCombatants : Array
 var activeEntity : Node2D
 var turnOrder : int = 0;
+
+
 
 # TODO: (Much later) Many RPGs let fast characters go multiple times before the enemy. Maybe if a character "laps" their opponents dex, they would go twice before they went once?
 #		For example, a rouge with 12 dex would go twice before an enemy with 5 dex gets to go? I'd have to consider how best to do that. 
@@ -12,37 +20,47 @@ var turnOrder : int = 0;
 #		Alternatively, going down the list and subtracting the second fastest, then the third fastest until the dex reaches 0, then doing it for the second one in the array, then third.
 
 func _init():
-	SignalBus.playerInitComplete.connect(loadActivePlayers)
 	SignalBus.battleInitComplete.connect(initializeBattleOrder)
 
 	
 func _ready():
 	pass
-	
 
-func loadActivePlayers(numPlayerChars : int, loadedPlayers : Array):
-	activePlayers = loadedPlayers
-	pass
 	
 func initializeBattleOrder(activePlayers, activeEnemies):
-		self.activeEnemies = activeEnemies
-		self.activePlayers = activePlayers
-		activeCombatants = calcTurnOrder(activePlayers, activeEnemies)
-		activeEntity = activeCombatants[0]
-		
-		print("Combatants in Order")
-		for i in activeCombatants:
-			print("================================================")
-			print("Order: ", i.pos)
-			print("Health: ", i.get_child(Globals.enemyChildren.STATS).health)
-			print("Strength: ", i.get_child(Globals.enemyChildren.STATS).strength)
-			print("Dexterity: ", i.get_child(Globals.enemyChildren.STATS).dexterity)
-			print("================================================\n\n")
-			
-		firstTurn()
+	
+	# Load active battle entites
+	self.activeEnemies = activeEnemies
+	self.activePlayers = activePlayers
+	activeCombatants = calcTurnOrder(activePlayers, activeEnemies)
+	activeEntity = activeCombatants[0]
+	
+	#print("Combatants in Order")
+	#for i in activeCombatants:
+		#printCombatant(i)
 
-# Note: Eventually add players, will require combining activePlayers and activeEnemies for activeCombatants
+	firstTurn()
+
+#Both enemies and players, as they use the same child order for now - this is likely going to change, so I am hesitant to change it to entityChildren
+func printCombatant(combatant : Variant):
+	var stats = combatant.get_child(Globals.enemyChildren.STATS)
+	var affiliation = "Unaffiliated"
+	print(str(AFFILIATIONS.PLAYER))
+	if combatant.is_in_group("battlePlayers"):
+		affiliation = "Player"
+	elif combatant.is_in_group("battleEnemies"):
+		affiliation = "Enemy"
+	
+	print("================================================")
+	print("NAME: ", stats.eName, " \t\t\t Affiliation: ", affiliation)
+	print("================================================")
+	print("HEALTH: ", stats.health, "\t\t\t\t\t\t", "DEX: ", stats.dexterity, "\tSTR:", stats.strength)
+	print("================================================\n\n")
+	
+	
 func calcTurnOrder(activePlayers : Array, activeEnemies : Array):
+	
+	# Combine players and enemies into one turn order
 	activeCombatants.append_array(activePlayers)
 	activeCombatants.append_array(activeEnemies)
 	activeCombatants.sort_custom(sortByDex)
@@ -57,22 +75,16 @@ func sortByDex(ent1, ent2):
 		return true
 	else:
 		return false
-	#var stat1 = getStats(ent1)
-	#var stat2 = getStats(ent2)
-#
-	#if stat1.getDexterity() > stat2.getDexterity():
-		#return true
-	#else:
-		#return false
+		
 func changeActiveEnemies(newEnemyList : Array):
 	pass
 
 func firstTurn():
 	turnOrder = 0
+	determineAffiliation(activeEntity)
 	print("\nFirst Turn")
 	print("================================================\n")
-	print(activeEntity.get_child(Globals.enemyChildren.STATS).eName, "'s turn")
-	print("In position ", activeEntity.pos)
+	printCombatant(activeEntity)
 	
 	
 func advanceTurn():
@@ -85,12 +97,33 @@ func advanceTurn():
 		turnOrder = 0
 		
 	activeEntity = activeCombatants[turnOrder]
+	determineAffiliation(activeEntity)
 	
-	print("\nNext Turn")
+	print("\nTurn ", turnOrder)
 	print("================================================\n")
-	print(activeEntity.get_child(Globals.enemyChildren.STATS).eName, "'s turn")
-	print("In position ", activeEntity.pos)
+	printCombatant(activeEntity)
 
+func playerTurn(activeCombatant):
+	print("Player Turn")
+	SignalBus.playerTurn.emit(activeCombatant)
+	pass
+	
+func enemyTurn(activeCombatant):
+	print("Enemy Turn")
+	SignalBus.enemyTurn.emit(activeCombatant)
+	
+# Helper for first turn and advance turn. checks whether it is player or AI turn then sends out a signal accordingly
+func determineAffiliation(activeCombatant : Variant):
+
+	if activeCombatant.affiliation == "Enemy":
+		enemyTurn(activeCombatant)
+		
+	elif activeCombatant.affiliation == "Player":
+		playerTurn(activeCombatant)
+	
+
+
+
+# SIGNAL FUNCTIONS
 func _on_next_turn_btn_button_up():
 	advanceTurn()
-	pass # Replace with function body.

@@ -2,11 +2,14 @@ extends Node2D
 
 var keyName : String = "Default"
 var pos : int
+var affiliation = "Enemy"
 
-
+func _init():
+	add_to_group("battleEnemies")
 func _ready():
-	
 	SignalBus.entityDestroyed.connect(destroySelf)
+	# Ok so apparently scene groups just refuse to work so we're gonna try global groups which is ass but ugh
+	
 	
 
 func destroySelf(pos):

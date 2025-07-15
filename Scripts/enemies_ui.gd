@@ -11,7 +11,9 @@ var enemyKeys : Array	# List of enemies in the battle by their dictionary keys
 
 func _init():
 	SignalBus.enemySpawned.connect(_on_enemy_spawned)
-
+	SignalBus.playerTurn.connect(_on_player_turn)
+	SignalBus.enemyTurn.connect(_on_enemy_turn)
+	
 func _ready():
 	#SignalBus.enemySpawned.connect(_on_enemy_spawned)
 	pass
@@ -30,7 +32,9 @@ func _on_enemy_spawned(instance, pos):
 	
 	add_child(btn)
 
-#func _on_enemy_button_button_up(keyName : String):
-	##print("From EnemyList UI: ", keyName)
-	#print(get_tree().root)
+func _on_player_turn(activeEntity):
+	self.visible = true
 	
+	
+func _on_enemy_turn(activeEntity):
+	self.visible = false
