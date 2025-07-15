@@ -48,11 +48,11 @@ func _ready():
 
 	
 # Main function that serves as a jumping off point for everything else. 
-func createEnemies(lastPlayerPos : int):
+func createEnemies(lastPlayerPos : int, playerEntites : Array):
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
 	placeEnemies(enemyNum, lastPlayerPos)
 	
-	SignalBus.battleInitComplete.emit(startingEnemies)
+	SignalBus.battleInitComplete.emit(playerEntites, startingEnemies)
 	
 # Generate number of enemies
 func generateNumOfEnemies() -> int: 

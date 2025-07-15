@@ -12,22 +12,26 @@ var turnOrder : int = 0;
 #		Alternatively, going down the list and subtracting the second fastest, then the third fastest until the dex reaches 0, then doing it for the second one in the array, then third.
 
 func _init():
+	SignalBus.playerInitComplete.connect(loadActivePlayers)
 	SignalBus.battleInitComplete.connect(initializeBattleOrder)
+
 	
 func _ready():
 	pass
 	
 
-
+func loadActivePlayers(numPlayerChars : int, loadedPlayers : Array):
+	activePlayers = loadedPlayers
+	pass
 	
-func initializeBattleOrder(activeEnemies):
+func initializeBattleOrder(activePlayers, activeEnemies):
 		self.activeEnemies = activeEnemies
-
-		activeCombatants = calcTurnOrder(activeEnemies)
+		self.activePlayers = activePlayers
+		activeCombatants = calcTurnOrder(activePlayers, activeEnemies)
 		activeEntity = activeCombatants[0]
 		
 		print("Combatants in Order")
-		for i in activeEnemies:
+		for i in activeCombatants:
 			print("================================================")
 			print("Order: ", i.pos)
 			print("Health: ", i.get_child(Globals.enemyChildren.STATS).health)
@@ -38,7 +42,9 @@ func initializeBattleOrder(activeEnemies):
 		firstTurn()
 
 # Note: Eventually add players, will require combining activePlayers and activeEnemies for activeCombatants
-func calcTurnOrder(activeCombatants : Array):
+func calcTurnOrder(activePlayers : Array, activeEnemies : Array):
+	activeCombatants.append_array(activePlayers)
+	activeCombatants.append_array(activeEnemies)
 	activeCombatants.sort_custom(sortByDex)
 	
 	return activeCombatants
