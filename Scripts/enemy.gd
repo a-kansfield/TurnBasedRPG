@@ -21,11 +21,19 @@ func destroySelf(pos):
 
 # Currently will select at random. More advanced AI can be added later
 func selectPlayerTarget(enemy : Variant, playerEntities : Array):
+	var selectedTarget = null
+	var targetNode = null
+	var enemyStats = null
+	
 	if self.pos == enemy.pos:
-		var numAvailTargets : int = playerEntities.size()
-		var selectedTarget = rng.randi_range(0, numAvailTargets - 1)
+		selectedTarget = rng.randi_range(0, playerEntities.size() - 1)
+		targetNode =  playerEntities[selectedTarget]
+		enemyStats = enemy.get_child(Globals.enemyChildren.STATS)
+		
 		print("Selected Target: ", playerEntities[selectedTarget].get_child(Globals.enemyChildren.STATS).eName)
-		return playerEntities[selectedTarget]
+		
+		SignalBus.changeEntityHealth.emit(targetNode.pos, -enemyStats.strength)
+		#return playerEntities[selectedTarget]
 	
 	
 	

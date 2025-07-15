@@ -34,19 +34,12 @@ var activeEnemies : Array
 
 func _init():
 	SignalBus.connect("playerInitComplete", createEnemies)
-	
-	pass
-	
-	
+
 func _ready():
-	#var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
-	#placeEnemies(enemyNum)
-	#
-	#SignalBus.battleInitComplete.emit(startingEnemies)
-	
 	pass
 
-	
+
+
 # Main function that serves as a jumping off point for everything else. 
 func createEnemies(lastPlayerPos : int, playerEntites : Array):
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
@@ -62,32 +55,19 @@ func generateNumOfEnemies() -> int:
 func placeEnemies(enemyNum : int, lastPlayerPos : int):
 	
 	for i in range(enemyNum):
-		var enemyInst = enemyScene.instantiate()
-		enemyInst = setPosition(enemyInst, i, ENTITY_Y_SPACING, ENTITY_X_OFFSET, ENTITY_Y_OFFSET)
-		enemyInst = generateEnemyType(enemyInst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
-		enemyInst.pos = lastPlayerPos + i
-		
+		var enemyInst = createEnemy(i, lastPlayerPos)
 		add_child(enemyInst)
 		
 		
 		# Create Label
-		var labelInst = enemyLabelScene.instantiate()
-		labelInst = setPosition(
-			labelInst, i, 
-			ENTITY_Y_SPACING, 
-			ENTITY_X_OFFSET, ENTITY_Y_OFFSET + LABEL_Y_OFFSET
-		)
-		
-		# Set Label text
-		var spr = enemyInst.get_child(Globals.enemyChildren.SPRITE)
-		var stats = enemyInst.get_child(Globals.enemyChildren.STATS)
-		var health = enemyInst.get_child(Globals.enemyChildren.HEALTH)
-		
-		labelInst.pos = lastPlayerPos + i
-		labelInst.totalHealth = health.totalHealth
-		labelInst.currentHealth = health.currentHealth
-		labelInst.entityName = stats.eName
-		
+		var labelInst = createEnemyLabel(i, lastPlayerPos, enemyInst)
+		#labelInst = setPosition(
+			#labelInst, i, 
+			#ENTITY_Y_SPACING, 
+			#ENTITY_X_OFFSET, ENTITY_Y_OFFSET + LABEL_Y_OFFSET
+		#)
+		#
+		## Set Label text
 		add_child(labelInst)
 		
 		SignalBus.enemySpawned.emit(enemyInst, lastPlayerPos + i) # Goes to EnemiesList under UI
@@ -96,8 +76,32 @@ func placeEnemies(enemyNum : int, lastPlayerPos : int):
 		startingEnemies.append(enemyInst)
 		activeEnemies.append(enemyInst)	
 	
+	
+func createEnemy(currentPos : int, lastPlayerPos : int) -> Variant:
+	var enemyInst = enemyScene.instantiate()
+	enemyInst = setPosition(enemyInst, currentPos, ENTITY_Y_SPACING, ENTITY_X_OFFSET, ENTITY_Y_OFFSET)
+	enemyInst = generateEnemyType(enemyInst)		# Using EnemyData.tres/gd - will randomly generate a statblock from the enemy dictionary
+	enemyInst.pos = lastPlayerPos + currentPos
+	return enemyInst
 
-
+func createEnemyLabel(currentPos : int, lastPlayerPos : int, enemyInst : Variant) -> Variant:
+		var spr = enemyInst.get_child(Globals.enemyChildren.SPRITE)
+		var stats = enemyInst.get_child(Globals.enemyChildren.STATS)
+		var health = enemyInst.get_child(Globals.enemyChildren.HEALTH)
+		
+		var labelInst = enemyLabelScene.instantiate()
+		labelInst = setPosition(
+			labelInst, currentPos, 
+			ENTITY_Y_SPACING, 
+			ENTITY_X_OFFSET, ENTITY_Y_OFFSET + LABEL_Y_OFFSET
+		)
+		labelInst.pos = lastPlayerPos + currentPos
+		labelInst.totalHealth = health.totalHealth
+		labelInst.currentHealth = health.currentHealth
+		labelInst.entityName = stats.eName
+		
+		return labelInst
+		
 # Sets the x and y value of the enemy
 func setPosition(entity : Variant, pos : int, Y_SPACING : int, X_OFFSET : int,  Y_OFFSET : int ) -> Variant:
 	VIEW_WIDTH = get_window().size[0] 	#NOTE: In the future this will be a global variable, but for right now it can stay here as the only thing that needs it.

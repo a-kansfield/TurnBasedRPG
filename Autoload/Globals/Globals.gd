@@ -13,18 +13,18 @@ var partyMembers = [
 		"Name": "Main Character",
 		"Strength": 8,
 		"Dexterity": 6,
-		"Health": 90
+		"Health": 30
 	},
 	{
 		"Name": "Character 2",
 		"Strength": 12,
 		"Dexterity": 3,
-		"Health": 120
+		"Health": 40
 	},
 	{
 		"Name": "Character 3",
 		"Strength": 3,
 		"Dexterity": 12,
-		"Health": 60
+		"Health": 20
 	},
 ]
