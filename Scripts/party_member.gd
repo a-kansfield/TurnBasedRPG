@@ -17,20 +17,22 @@ var entityLabelScene = preload("res://Scenes/entity_label.tscn")
 @onready var VIEW_WIDTH : int = get_window().size[0]
 
 
-var activeEntites : Array
+var activeEntities : Array
 
 
 
 func _ready():
 	placePlayers()
-	SignalBus.playerInitComplete.emit(NUM_PARTY_MEMBERS)
+	SignalBus.playerInitComplete.emit(NUM_PARTY_MEMBERS, activeEntities)
 	
 func placePlayers():
+	
 	for i in range(NUM_PARTY_MEMBERS):
 		var entityInst = playerCharScene.instantiate()
 		entityInst.pos = i
 		entityInst = setPosition(entityInst, i, ENTITY_Y_SPACING, ENTITY_X_OFFSET, ENTITY_Y_OFFSET)
 		setStats(entityInst, i)
+		activeEntities.append(entityInst)
 		add_child(entityInst)
 		
 		
@@ -53,7 +55,6 @@ func placePlayers():
 		add_child(labelInst)
 		
 		
-		print(i)
 	pass
 
 func setPosition(entity : Variant, pos : int, Y_SPACING : int, X_OFFSET : int,  Y_OFFSET : int ) -> Variant:

@@ -6,8 +6,8 @@ signal attackEnemy
 
 signal enemySpawned(inst, pos) #inst, pos, enemyChildren
 
-signal playerInitComplete(lastPos : int)
-signal battleInitComplete(activeEnemies : Array)
+signal playerInitComplete(lastPos : int, loadedPlayers : Array)
+signal battleInitComplete(playerEntites : Array, activeEnemies : Array)
 
 
 signal entityDestroyed(charPos : int)
