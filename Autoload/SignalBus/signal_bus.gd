@@ -5,8 +5,8 @@ var enemyData = preload("res://Data/EnemyData.tres")
 
 
 # SIGNALS BATTLE
-signal playerTurn(activeEntity)
-signal enemyTurn(activeEntity)
+signal playerTurn(activeEntity, enemyEntities)
+signal enemyTurn(activeEntity, playerEntities)
 
 signal enemySpawned(inst, pos) #inst, pos, enemyChildren
 

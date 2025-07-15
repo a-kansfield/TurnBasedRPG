@@ -104,13 +104,11 @@ func advanceTurn():
 	printCombatant(activeEntity)
 
 func playerTurn(activeCombatant):
-	print("Player Turn")
-	SignalBus.playerTurn.emit(activeCombatant)
+	SignalBus.playerTurn.emit(activeCombatant, activeEnemies)
 	pass
 	
 func enemyTurn(activeCombatant):
-	print("Enemy Turn")
-	SignalBus.enemyTurn.emit(activeCombatant)
+	SignalBus.enemyTurn.emit(activeCombatant, activePlayers)
 	
 # Helper for first turn and advance turn. checks whether it is player or AI turn then sends out a signal accordingly
 func determineAffiliation(activeCombatant : Variant):

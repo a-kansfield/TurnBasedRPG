@@ -4,7 +4,10 @@ var keyName : String = "Default"
 var pos : int
 var affiliation = "Enemy"
 
+var rng = RandomNumberGenerator.new()
+
 func _init():
+	SignalBus.enemyTurn.connect(selectPlayerTarget)
 	add_to_group("battleEnemies")
 func _ready():
 	SignalBus.entityDestroyed.connect(destroySelf)
@@ -16,6 +19,22 @@ func destroySelf(pos):
 	if self.pos == pos:
 		queue_free()
 
+# Currently will select at random. More advanced AI can be added later
+func selectPlayerTarget(enemy : Variant, playerEntities : Array):
+	if self.pos == enemy.pos:
+		var numAvailTargets : int = playerEntities.size()
+		var selectedTarget = rng.randi_range(0, numAvailTargets - 1)
+		print("Selected Target: ", playerEntities[selectedTarget].get_child(Globals.enemyChildren.STATS).eName)
+		return playerEntities[selectedTarget]
+	
+	
+	
+	
+	
+	
+	
+	
+	
 # Unused - with a random number generator it can modulate the sprite color
 #func randomColorGen(rng : RandomNumberGenerator):
 	#var r = rng.randi_range(0, 255)
