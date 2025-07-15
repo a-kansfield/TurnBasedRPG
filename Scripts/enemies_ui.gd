@@ -32,9 +32,9 @@ func _on_enemy_spawned(instance, pos):
 	
 	add_child(btn)
 
-func _on_player_turn(activeEntity):
+func _on_player_turn(activeEntity, enemyEntities):
 	self.visible = true
 	
 	
-func _on_enemy_turn(activeEntity):
+func _on_enemy_turn(activeEntity, playerEntities):
 	self.visible = false

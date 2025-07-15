@@ -10,7 +10,7 @@ var activeEnemies : Array
 var activePlayers : Array
 var activeCombatants : Array
 var activeEntity : Node2D
-var turnOrder : int = 0;
+var turnOrderCounter : int = 0;
 
 
 
@@ -21,6 +21,8 @@ var turnOrder : int = 0;
 
 func _init():
 	SignalBus.battleInitComplete.connect(initializeBattleOrder)
+	SignalBus.entityDestroyed.connect(removeEntityFromTurnOrder)
+	
 
 	
 func _ready():
@@ -80,7 +82,7 @@ func changeActiveEnemies(newEnemyList : Array):
 	pass
 
 func firstTurn():
-	turnOrder = 0
+	turnOrderCounter = 0
 	determineAffiliation(activeEntity)
 	print("\nFirst Turn")
 	print("================================================\n")
@@ -89,28 +91,26 @@ func firstTurn():
 	
 func advanceTurn():
 
-	turnOrder += 1
-	if turnOrder > activeCombatants.size() - 1:
+	turnOrderCounter += 1
+	if turnOrderCounter > activeCombatants.size() - 1:
 		print("\n\n================================================")
 		print("New Round")
 		print("================================================\n\n")
-		turnOrder = 0
+		turnOrderCounter = 0
 		
-	activeEntity = activeCombatants[turnOrder]
+	activeEntity = activeCombatants[turnOrderCounter]
 	determineAffiliation(activeEntity)
 	
-	print("\nTurn ", turnOrder)
+	print("\nTurn ", turnOrderCounter)
 	print("================================================\n")
 	printCombatant(activeEntity)
 
 func playerTurn(activeCombatant):
-	print("Player Turn")
-	SignalBus.playerTurn.emit(activeCombatant)
+	SignalBus.playerTurn.emit(activeCombatant, activeEnemies)
 	pass
 	
 func enemyTurn(activeCombatant):
-	print("Enemy Turn")
-	SignalBus.enemyTurn.emit(activeCombatant)
+	SignalBus.enemyTurn.emit(activeCombatant, activePlayers)
 	
 # Helper for first turn and advance turn. checks whether it is player or AI turn then sends out a signal accordingly
 func determineAffiliation(activeCombatant : Variant):
@@ -127,3 +127,26 @@ func determineAffiliation(activeCombatant : Variant):
 # SIGNAL FUNCTIONS
 func _on_next_turn_btn_button_up():
 	advanceTurn()
+
+# Theres a better way to do this than checking through 2 arrays for the same unique ID I'm sure...
+func removeEntityFromTurnOrder(removedEntityPos):
+	var removedCombatant
+	var count = 0
+	for i in activeCombatants:
+		if i.pos == removedEntityPos:
+			removedCombatant = activeCombatants.pop_at(count)
+		count += 1
+			
+	if removedCombatant.affiliation == "Player":
+		count = 0
+		for i in activePlayers:
+			if i.pos == removedEntityPos && removedCombatant != null:
+				activePlayers.remove_at(count)
+				print(activePlayers)
+			count += 1
+	elif removedCombatant.affiliation == "Enemy":
+		count = 0
+		for i in activeEnemies:
+			if i.pos == removedEntityPos && removedCombatant != null:
+				activeEnemies.remove_at(count)
+			count += 1

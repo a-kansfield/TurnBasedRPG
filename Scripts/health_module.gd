@@ -10,7 +10,6 @@ func _ready():
 	
 # Called via Signal. This function works for both attacking and healing. An attack should include a negative number, and a heal should include a positive one.
 func changeHealth(pos: int, amount : int):
-	print("Change Health Called")
 	if parent.pos == pos:
 		currentHealth = currentHealth + amount
 		if currentHealth > totalHealth:
@@ -21,4 +20,3 @@ func changeHealth(pos: int, amount : int):
 			SignalBus.entityDestroyed.emit(get_parent().pos)
 		else:
 			SignalBus.projectCurrentHealth.emit(pos, currentHealth)
-		print(currentHealth)
