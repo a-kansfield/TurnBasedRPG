@@ -69,6 +69,7 @@ func placeEnemies(enemyNum : int, lastPlayerPos : int):
 		
 		add_child(enemyInst)
 		
+		
 		# Create Label
 		var labelInst = enemyLabelScene.instantiate()
 		labelInst = setPosition(
@@ -94,7 +95,8 @@ func placeEnemies(enemyNum : int, lastPlayerPos : int):
 		#Add unique references to Enemies (Currently unused but maybe necessary later)
 		startingEnemies.append(enemyInst)
 		activeEnemies.append(enemyInst)	
-		
+	
+
 
 # Sets the x and y value of the enemy
 func setPosition(entity : Variant, pos : int, Y_SPACING : int, X_OFFSET : int,  Y_OFFSET : int ) -> Variant:
