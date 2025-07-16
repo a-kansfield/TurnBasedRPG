@@ -16,6 +16,7 @@ func _init():
 	
 func _ready():
 	#SignalBus.enemySpawned.connect(_on_enemy_spawned)
+	print("Root Node Array from Enemies List: ", self.owner.activeEnemies)
 	pass
 
 

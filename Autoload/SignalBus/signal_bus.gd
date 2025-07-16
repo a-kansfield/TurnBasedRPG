@@ -10,9 +10,11 @@ signal enemyTurn(activeEntity, playerEntities)
 
 signal enemySpawned(inst, pos) #inst, pos, enemyChildren
 
-signal playerInitComplete(lastPos : int, loadedPlayers : Array)
-signal battleInitComplete(playerEntites : Array, activeEnemies : Array)
 
+signal playerInitComplete(lastPos : int) # loadedPlayers : Array
+signal enemyInitComplete(activeEnemies : Array)
+signal battleInitComplete()
+signal battleVarsSet(playerEntites : Array, activeEnemies : Array)
 
 signal entityDestroyed(charPos : int)
 signal changeEntityHealth(charPos : int, amount : int)
