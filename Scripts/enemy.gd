@@ -11,6 +11,7 @@ func _init():
 	add_to_group("battleEnemies")
 	
 func _ready():
+	get_child(Globals.enemyChildren.ANIM).play("RESET")
 	SignalBus.entityDestroyed.connect(destroySelf)
 	
 func destroySelf(pos):
@@ -29,7 +30,7 @@ func selectPlayerTarget(enemy : Variant, playerEntities : Array):
 		enemyStats = enemy.get_child(Globals.enemyChildren.STATS)
 		
 		print("Selected Target: ", playerEntities[selectedTarget].get_child(Globals.enemyChildren.STATS).eName)
-		
+		self.get_child(Globals.enemyChildren.ANIM).play("attack_left")
 		SignalBus.changeEntityHealth.emit(targetNode.pos, -enemyStats.strength)
 		#return playerEntities[selectedTarget]
 	

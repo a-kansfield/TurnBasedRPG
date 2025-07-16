@@ -20,7 +20,7 @@ anchor_mode = 0
 [node name="TurnController" parent="." instance=ExtResource("3_1otgo")]
 
 [node name="EnemyTurnTimer" type="Timer" parent="TurnController"]
-wait_time = 3.0
+wait_time = 2.0
 one_shot = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
