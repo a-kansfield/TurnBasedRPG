@@ -6,6 +6,11 @@ var affiliation = "Enemy"
 
 var rng = RandomNumberGenerator.new()
 
+
+# TEMP VARS - Used so I don't have to bring those values to the animation player only for it to bring it right back in its signal.
+var tempTargetNodePos
+var tempEnemyAttackVal
+
 func _init():
 	SignalBus.enemyTurn.connect(selectPlayerTarget)
 	add_to_group("battleEnemies")
@@ -14,11 +19,12 @@ func _ready():
 	get_child(Globals.enemyChildren.ANIM).play("RESET")
 	SignalBus.entityDestroyed.connect(destroySelf)
 	
+
 func destroySelf(pos):
 	if self.pos == pos:
 		queue_free()
 
-# Currently will select at random. More advanced AI can be added later
+# Currently will select at random. More advanced AI can be added later. Health is not changed until the animation is complete.
 func selectPlayerTarget(enemy : Variant, playerEntities : Array):
 	var selectedTarget = null
 	var targetNode = null
@@ -30,8 +36,11 @@ func selectPlayerTarget(enemy : Variant, playerEntities : Array):
 		enemyStats = enemy.get_child(Globals.enemyChildren.STATS)
 		
 		print("Selected Target: ", playerEntities[selectedTarget].get_child(Globals.enemyChildren.STATS).eName)
+		tempTargetNodePos = targetNode.pos
+		tempEnemyAttackVal = -enemyStats.strength
+		
 		self.get_child(Globals.enemyChildren.ANIM).play("attack_left")
-		SignalBus.changeEntityHealth.emit(targetNode.pos, -enemyStats.strength)
+		
 		#return playerEntities[selectedTarget]
 	
 	
@@ -49,3 +58,10 @@ func selectPlayerTarget(enemy : Variant, playerEntities : Array):
 	#var b = rng.randi_range(0, 255)
 	#self.color = Color.from_rgba8(r,g,b,255)
 	#modulate = color
+
+
+func landHit():
+	print("Hit Landed")
+	SignalBus.changeEntityHealth.emit(tempTargetNodePos, tempEnemyAttackVal)
+	
+	pass # Replace with function body.
