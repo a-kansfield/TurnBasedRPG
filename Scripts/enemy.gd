@@ -9,12 +9,10 @@ var rng = RandomNumberGenerator.new()
 func _init():
 	SignalBus.enemyTurn.connect(selectPlayerTarget)
 	add_to_group("battleEnemies")
+	
 func _ready():
 	SignalBus.entityDestroyed.connect(destroySelf)
-	# Ok so apparently scene groups just refuse to work so we're gonna try global groups which is ass but ugh
 	
-	
-
 func destroySelf(pos):
 	if self.pos == pos:
 		queue_free()

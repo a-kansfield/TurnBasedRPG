@@ -28,9 +28,7 @@ const LABEL_Y_OFFSET : int = 5
 #NOTE: onready wouldn't show up in time for setPosition, causing enemies to spawn off the screen. Current fix is to instead get the view width withing setPosition
 var VIEW_WIDTH : int
 
-# Starting Enemies are kept track of to determine things like experience earned. Active is tracked separately and can also be considered "living" enemies
-var startingEnemies : Array
-var activeEnemies : Array
+var BATTLE		# Root Battle node. Houses variables within the scope of the whole scene. Needs to be assigned after Battle has been initialized
 
 func _init():
 	SignalBus.connect("playerInitComplete", createEnemies)
@@ -41,11 +39,14 @@ func _ready():
 
 
 # Main function that serves as a jumping off point for everything else. 
-func createEnemies(lastPlayerPos : int, playerEntites : Array):
+func createEnemies(lastPlayerPos : int):
+	BATTLE = self.owner
+	
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
 	placeEnemies(enemyNum, lastPlayerPos)
-	
-	SignalBus.battleInitComplete.emit(playerEntites, startingEnemies)
+	SignalBus.enemyInitComplete.emit(BATTLE.startingEnemies)
+	#SignalBus.battleInitComplete.emit(playerEntites, startingEnemies)
+	SignalBus.battleInitComplete.emit()
 	
 # Generate number of enemies
 func generateNumOfEnemies() -> int: 
@@ -55,26 +56,19 @@ func generateNumOfEnemies() -> int:
 func placeEnemies(enemyNum : int, lastPlayerPos : int):
 	
 	for i in range(enemyNum):
+		# Create Enemy
 		var enemyInst = createEnemy(i, lastPlayerPos)
 		add_child(enemyInst)
 		
-		
 		# Create Label
 		var labelInst = createEnemyLabel(i, lastPlayerPos, enemyInst)
-		#labelInst = setPosition(
-			#labelInst, i, 
-			#ENTITY_Y_SPACING, 
-			#ENTITY_X_OFFSET, ENTITY_Y_OFFSET + LABEL_Y_OFFSET
-		#)
-		#
-		## Set Label text
 		add_child(labelInst)
 		
 		SignalBus.enemySpawned.emit(enemyInst, lastPlayerPos + i) # Goes to EnemiesList under UI
 		
 		#Add unique references to Enemies (Currently unused but maybe necessary later)
-		startingEnemies.append(enemyInst)
-		activeEnemies.append(enemyInst)	
+		BATTLE.startingEnemies.append(enemyInst)
+		BATTLE.activeEnemies.append(enemyInst)	
 	
 	
 func createEnemy(currentPos : int, lastPlayerPos : int) -> Variant:
@@ -95,6 +89,7 @@ func createEnemyLabel(currentPos : int, lastPlayerPos : int, enemyInst : Variant
 			ENTITY_Y_SPACING, 
 			ENTITY_X_OFFSET, ENTITY_Y_OFFSET + LABEL_Y_OFFSET
 		)
+		
 		labelInst.pos = lastPlayerPos + currentPos
 		labelInst.totalHealth = health.totalHealth
 		labelInst.currentHealth = health.currentHealth
