@@ -20,7 +20,7 @@ var enemyData = preload("res://Data/EnemyData.tres")
 var rng = RandomNumberGenerator.new()
 
 
-const ENTITY_Y_OFFSET : int = 180
+const ENTITY_Y_OFFSET : int = 200
 const ENTITY_Y_SPACING : int = 200			# Multiplied by position to evenly space all enemies
 const ENTITY_X_OFFSET : int = -150
 const LABEL_Y_OFFSET : int = 5

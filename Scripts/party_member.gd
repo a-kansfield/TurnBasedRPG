@@ -4,9 +4,9 @@ extends Node2D
 # Party Members should be an array instead of a dictionary - its easier to alter this way and there are less than there would be of enemies
 
 # SPACING
-const ENTITY_Y_OFFSET : int = 180
+const ENTITY_Y_OFFSET : int = 200
 const ENTITY_Y_SPACING : int = 200			# Multiplied by position to evenly space all entities
-const ENTITY_X_OFFSET : int = 550
+const ENTITY_X_OFFSET : int = 150
 const LABEL_Y_OFFSET : int = 5
 
 const NUM_PARTY_MEMBERS : int = 3

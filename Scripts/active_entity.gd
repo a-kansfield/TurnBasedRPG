@@ -7,8 +7,7 @@ func _init():
 	SignalBus.enemyTurn.connect(setTurnText)
 	pass
 	
+
 func setTurnText(entity : Variant, activeEntities: Array):
 	self.text = formatString % entity.get_child(Globals.enemyChildren.STATS).eName
-	
-	
 	pass

@@ -13,14 +13,10 @@ func _init():
 	SignalBus.battleInitComplete.connect(_battleInitComplete)
 	SignalBus.playerInitComplete.connect(_playerInitComplete)
 	SignalBus.enemyInitComplete.connect(_enemyInitComplete)
-	
-	pass
 
 
 func _playerInitComplete(lastPos : int):
 	print("Player Init Complete from Scene Root")
-	
-	pass
 	
 func _enemyInitComplete(startingEnemies : Array):
 	self.activeEnemies = startingEnemies
