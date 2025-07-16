@@ -20,7 +20,7 @@ func _init():
 	SignalBus.battleVarsSet.connect(initializeBattleOrder)
 	SignalBus.battleInitComplete.connect(initializeBattleOrder)
 	SignalBus.entityDestroyed.connect(removeEntityFromTurnOrder)
-	
+	SignalBus.playerEndTurn.connect(endPlayerTurn)
 
 	
 func _ready():
@@ -156,6 +156,9 @@ func removeEntityFromTurnOrder(removedEntityPos):
 			if BATTLE.activeEnemies.size() == 0:
 				print("THEY DIED")
 
+
+func endPlayerTurn():
+	advanceTurn()
 
 func _on_enemy_turn_timer_timeout():
 	advanceTurn()

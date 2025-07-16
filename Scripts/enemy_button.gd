@@ -12,8 +12,8 @@ func _ready():
 
 func _on_button_up():
 	#enemy_button_button_up.emit(keyName)
-	
-	SignalBus.changeEntityHealth.emit(pos, -2)
+	SignalBus.playerAttack.emit(pos)
+	#SignalBus.changeEntityHealth.emit(pos, -2)
 	pass # Replace with function body.
 
 func remove(pos):
