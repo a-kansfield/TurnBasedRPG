@@ -7,7 +7,7 @@ enum AFFILIATIONS {
 
 var activeEntity : Node2D
 var turnOrderCounter : int = 0;
-
+@onready var enemyTurnTimer = get_child(0) 
 var BATTLE
 
 # TODO: (Much later) Many RPGs let fast characters go multiple times before the enemy. Maybe if a character "laps" their opponents dex, they would go twice before they went once?
@@ -117,6 +117,7 @@ func determineAffiliation(activeCombatant : Variant):
 
 	if activeCombatant.affiliation == "Enemy":
 		enemyTurn(activeCombatant)
+		enemyTurnTimer.start()
 		
 	elif activeCombatant.affiliation == "Player":
 		playerTurn(activeCombatant)
@@ -154,3 +155,8 @@ func removeEntityFromTurnOrder(removedEntityPos):
 			count += 1
 			if BATTLE.activeEnemies.size() == 0:
 				print("THEY DIED")
+
+
+func _on_enemy_turn_timer_timeout():
+	advanceTurn()
+	pass # Replace with function body.

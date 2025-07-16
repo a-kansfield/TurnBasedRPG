@@ -5,6 +5,8 @@ var currentHealth : int
 
 @onready var parent = get_parent()
 
+var healthChangeAnimScene = preload("res://Scenes/health_change_anim.tscn")
+
 func _ready():
 	SignalBus.changeEntityHealth.connect(changeHealth)
 	
@@ -14,9 +16,19 @@ func changeHealth(pos: int, amount : int):
 		currentHealth = currentHealth + amount
 		if currentHealth > totalHealth:
 			currentHealth = totalHealth
+			
 		if currentHealth <= 0:
 			currentHealth = 0
 			# Destroy parent
 			SignalBus.entityDestroyed.emit(get_parent().pos)
 		else:
+			healthAnimation(amount)
+			
 			SignalBus.projectCurrentHealth.emit(pos, currentHealth)
+
+func healthAnimation(amount : int):
+	var inst = healthChangeAnimScene.instantiate()
+	var label = inst.get_child(0)
+	
+	label.text = str(amount)
+	add_child(inst)
