@@ -1,0 +1,79 @@
+[gd_scene load_steps=9 format=3 uid="uid://clcyc6rspa7nf"]
+
+[ext_resource type="Script" uid="uid://jcvs0h5jbyjc" path="res://Scripts/Battle/BattleEntity/Enemy/enemy.gd" id="1_ae2bx"]
+[ext_resource type="Texture2D" uid="uid://c6wc1qcj47ekb" path="res://Sprites/Preloaded Assets/icon.svg" id="2_n2ult"]
+[ext_resource type="Script" uid="uid://bn4dv335l824a" path="res://Scripts/Battle/BattleEntity/Enemy/enemySpr.gd" id="3_85fri"]
+[ext_resource type="Script" uid="uid://b2d3uudgr2u5j" path="res://Scripts/Battle/BattleEntity/stats_module.gd" id="4_wud8f"]
+[ext_resource type="PackedScene" uid="uid://dbw4fnb5j0eys" path="res://Scenes/Battle/BattleEntity/health_module.tscn" id="5_8vyg7"]
+
+[sub_resource type="Animation" id="Animation_ghaa6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0830c"]
+resource_name = "attack_left"
+length = 0.35
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.35),
+"transitions": PackedFloat32Array(0.189465, 1, 0.217638, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-130, 0), Vector2(10, 0), Vector2(0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"landHit"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1dp5w"]
+_data = {
+&"RESET": SubResource("Animation_ghaa6"),
+&"attack_left": SubResource("Animation_0830c")
+}
+
+[node name="Enemy" type="Node2D" groups=["enemy"]]
+script = ExtResource("1_ae2bx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -65)
+texture = ExtResource("2_n2ult")
+script = ExtResource("3_85fri")
+
+[node name="StatsModule" type="Node" parent="."]
+script = ExtResource("4_wud8f")
+strength = 2
+
+[node name="HealthModule" parent="." instance=ExtResource("5_8vyg7")]
+
+[node name="EnemyAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1dp5w")
+}
+
+[connection signal="animation_finished" from="EnemyAnimationPlayer" to="." method="_on_enemy_animation_player_animation_finished"]
