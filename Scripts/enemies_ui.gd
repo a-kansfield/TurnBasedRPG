@@ -13,13 +13,11 @@ func _init():
 	SignalBus.enemySpawned.connect(_on_enemy_spawned)
 	SignalBus.playerTurn.connect(_on_player_turn)
 	SignalBus.enemyTurn.connect(_on_enemy_turn)
-	SignalBus.playerAttack.connect(toggleButtonClickability)
+	SignalBus.playerAttack.connect(func(a): _on_player_attack())
 	
 func _ready():
-	#SignalBus.enemySpawned.connect(_on_enemy_spawned)
-	print("Root Node Array from Enemies List: ", self.owner.activeEnemies)
-	toggleButtonClickability(null)
-	pass
+	
+	enableButtons() # Sets all buttons to be enabled at the start
 
 
 # Signal from Enemy Factory - creates a button that matches the generated enemy
@@ -35,15 +33,33 @@ func _on_enemy_spawned(instance, pos):
 	
 	add_child(btn)
 
-func toggleButtonClickability(targetEntity):
+
+# Cycles through all enemy buttons and disables or enables as needed. Enebled at player turn start, and disabled after player turn attack.
+
+func enableButtons():
 	var buttons = get_children()
 	for i in buttons:
-		i.disabled = !i.disabled
+		i.disabled = false
 		
+func disableButtons():
+	var buttons = get_children()
+	for i in buttons:
+		i.disabled = true
+			
 func _on_player_turn(activeEntity, enemyEntities):
-	toggleButtonClickability(null)
-	self.visible = true
+	self.visible = false
+	enableButtons()
 	
+	
+func _on_player_attack():
+	disableButtons()
+	self.visible = false;
 	
 func _on_enemy_turn(activeEntity, playerEntities):
 	self.visible = false
+
+
+func _on_attack_btn_button_up():
+	self.visible = !self.visible
+	enableButtons()
+	pass # Replace with function body.
