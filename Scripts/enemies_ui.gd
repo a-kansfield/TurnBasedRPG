@@ -13,10 +13,12 @@ func _init():
 	SignalBus.enemySpawned.connect(_on_enemy_spawned)
 	SignalBus.playerTurn.connect(_on_player_turn)
 	SignalBus.enemyTurn.connect(_on_enemy_turn)
+	SignalBus.playerAttack.connect(toggleButtonClickability)
 	
 func _ready():
 	#SignalBus.enemySpawned.connect(_on_enemy_spawned)
 	print("Root Node Array from Enemies List: ", self.owner.activeEnemies)
+	toggleButtonClickability(null)
 	pass
 
 
@@ -33,7 +35,13 @@ func _on_enemy_spawned(instance, pos):
 	
 	add_child(btn)
 
+func toggleButtonClickability(targetEntity):
+	var buttons = get_children()
+	for i in buttons:
+		i.disabled = !i.disabled
+		
 func _on_player_turn(activeEntity, enemyEntities):
+	toggleButtonClickability(null)
 	self.visible = true
 	
 	
