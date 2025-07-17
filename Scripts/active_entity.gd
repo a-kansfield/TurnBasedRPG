@@ -3,8 +3,8 @@ extends Label
 var formatString = "%s's Turn"
 var BATTLE
 func _init():
-	SignalBus.playerTurn.connect(setTurnText)
-	SignalBus.enemyTurn.connect(setTurnText)
+	Battle_SB.playerTurn.connect(setTurnText)
+	Battle_SB.enemyTurn.connect(setTurnText)
 	pass
 	
 

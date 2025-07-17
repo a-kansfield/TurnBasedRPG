@@ -13,7 +13,7 @@ extends Node2D
 
 var enemyScene = preload("res://Scenes/enemy.tscn")
 var enemyLabelScene = preload("res://Scenes/entity_label.tscn")
-var enemyData = preload("res://Data/EnemyData.tres")
+var enemyData = preload("res://Autoload/Data/EnemyData.tres")
 
 
 # Constants
@@ -31,7 +31,7 @@ var VIEW_WIDTH : int
 var BATTLE		# Root Battle node. Houses variables within the scope of the whole scene. Needs to be assigned after Battle has been initialized
 
 func _init():
-	SignalBus.connect("playerInitComplete", createEnemies)
+	Battle_SB.connect("playerInitComplete", createEnemies)
 
 func _ready():
 	pass
@@ -44,9 +44,9 @@ func createEnemies(lastPlayerPos : int):
 	
 	var enemyNum = generateNumOfEnemies()	# Determine number of enemies in battle
 	placeEnemies(enemyNum, lastPlayerPos)
-	SignalBus.enemyInitComplete.emit(BATTLE.startingEnemies)
-	#SignalBus.battleInitComplete.emit(playerEntites, startingEnemies)
-	SignalBus.battleInitComplete.emit()
+	Battle_SB.enemyInitComplete.emit(BATTLE.startingEnemies)
+	#Battle_SB.battleInitComplete.emit(playerEntites, startingEnemies)
+	Battle_SB.battleInitComplete.emit()
 	
 # Generate number of enemies
 func generateNumOfEnemies() -> int: 
@@ -64,7 +64,7 @@ func placeEnemies(enemyNum : int, lastPlayerPos : int):
 		var labelInst = createEnemyLabel(i, lastPlayerPos, enemyInst)
 		add_child(labelInst)
 		
-		SignalBus.enemySpawned.emit(enemyInst, lastPlayerPos + i) # Goes to EnemiesList under UI
+		Battle_SB.enemySpawned.emit(enemyInst, lastPlayerPos + i) # Goes to EnemiesList under UI
 		
 		#Add unique references to Enemies (Currently unused but maybe necessary later)
 		BATTLE.startingEnemies.append(enemyInst)

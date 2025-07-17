@@ -10,9 +10,9 @@ var activeCombatants : Array
 
 
 func _init():
-	SignalBus.battleInitComplete.connect(_battleInitComplete)
-	SignalBus.playerInitComplete.connect(_playerInitComplete)
-	SignalBus.enemyInitComplete.connect(_enemyInitComplete)
+	Battle_SB.battleInitComplete.connect(_battleInitComplete)
+	Battle_SB.playerInitComplete.connect(_playerInitComplete)
+	Battle_SB.enemyInitComplete.connect(_enemyInitComplete)
 
 
 func _playerInitComplete(lastPos : int):

@@ -12,12 +12,11 @@ var tempTargetNodePos
 var tempEnemyAttackVal
 
 func _init():
-	SignalBus.enemyTurn.connect(selectPlayerTarget)
+	Battle_SB.enemyTurn.connect(selectPlayerTarget)
 	add_to_group("battleEnemies")
 	
 func _ready():
-	get_child(Globals.enemyChildren.ANIM).play("RESET")
-	SignalBus.entityDestroyed.connect(destroySelf)
+	Battle_SB.entityDestroyed.connect(destroySelf)
 	
 
 func destroySelf(pos):
@@ -62,7 +61,7 @@ func selectPlayerTarget(enemy : Variant, playerEntities : Array):
 
 func landHit():
 	print("Hit Landed")
-	SignalBus.changeEntityHealth.emit(tempTargetNodePos, tempEnemyAttackVal)
+	Battle_SB.changeEntityHealth.emit(tempTargetNodePos, tempEnemyAttackVal)
 	
 	
 	pass # Replace with function body.

@@ -12,7 +12,7 @@ var entityName : String
 @onready var totalHealthLabel = $PanelContainer/MarginContainer/LabelContainer/TotalHealth
 
 func _ready():
-	SignalBus.entityDestroyed.connect(destroySelf)
+	Battle_SB.entityDestroyed.connect(destroySelf)
 	nameLabel.text = entityName
 	currentHealthLabel.pos = pos
 	currentHealthLabel.text = str(currentHealth)

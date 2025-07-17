@@ -19,7 +19,7 @@ var EnemyTable = {
 	"plant" : {
 		"name" : "A Literal Shrub",
 		"health" : 5,
-		"strength" : 2,
+		"strength" : 800,
 		"dexterity": 8,
 		"color" : Color.from_rgba8(120,180,100,255)
 	}

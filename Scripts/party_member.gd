@@ -26,7 +26,7 @@ func _ready():
 	BATTLE = self.owner
 	print("Root Node Array from Party Factory: ", BATTLE.activeEnemies)
 	placePlayers()
-	SignalBus.playerInitComplete.emit(NUM_PARTY_MEMBERS)
+	Battle_SB.playerInitComplete.emit(NUM_PARTY_MEMBERS)
 	
 func placePlayers():
 	

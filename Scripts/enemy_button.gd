@@ -8,12 +8,12 @@ var enemyFactoryScript = preload("res://Scripts/enemy_factory.gd")
 signal enemy_button_button_up(key)
 
 func _ready():
-	SignalBus.entityDestroyed.connect(remove)
+	Battle_SB.entityDestroyed.connect(remove)
 
 func _on_button_up():
 	#enemy_button_button_up.emit(keyName)
-	SignalBus.playerAttack.emit(pos)
-	#SignalBus.changeEntityHealth.emit(pos, -2)
+	Battle_SB.playerAttack.emit(pos)
+	#Battle_SB.changeEntityHealth.emit(pos, -2)
 	pass # Replace with function body.
 
 func remove(pos):
