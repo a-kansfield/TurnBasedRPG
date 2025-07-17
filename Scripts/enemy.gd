@@ -16,7 +16,6 @@ func _init():
 	add_to_group("battleEnemies")
 	
 func _ready():
-	get_child(Globals.enemyChildren.ANIM).play("RESET")
 	Battle_SB.entityDestroyed.connect(destroySelf)
 	
 

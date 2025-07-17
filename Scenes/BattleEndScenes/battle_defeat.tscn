@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://c83ecdyvdbdr2"]
+
+[sub_resource type="FontVariation" id="FontVariation_au3ci"]
+variation_embolden = 0.83
+spacing_glyph = 12
+
+[node name="BattleDefeat" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -60.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DefeatContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 0
+
+[node name="DefeatMargin" type="PanelContainer" parent="CanvasLayer/VBoxContainer/DefeatContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="DefeatLabel" type="Label" parent="CanvasLayer/VBoxContainer/DefeatContainer/DefeatMargin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.249797, 0.0764769, 0.0496077, 1)
+theme_override_colors/font_outline_color = Color(0.730113, 0.237296, 0.198634, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = SubResource("FontVariation_au3ci")
+theme_override_font_sizes/font_size = 58
+text = "YOU DIED"
+horizontal_alignment = 1
