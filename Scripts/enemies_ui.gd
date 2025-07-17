@@ -10,10 +10,10 @@ var enemyButtonScene = preload("res://Scenes/enemy_button.tscn")
 var enemyKeys : Array	# List of enemies in the battle by their dictionary keys
 
 func _init():
-	SignalBus.enemySpawned.connect(_on_enemy_spawned)
-	SignalBus.playerTurn.connect(_on_player_turn)
-	SignalBus.enemyTurn.connect(_on_enemy_turn)
-	SignalBus.playerAttack.connect(func(a): _on_player_attack())
+	Battle_SB.enemySpawned.connect(_on_enemy_spawned)
+	Battle_SB.playerTurn.connect(_on_player_turn)
+	Battle_SB.enemyTurn.connect(_on_enemy_turn)
+	Battle_SB.playerAttack.connect(func(a): _on_player_attack())
 	
 func _ready():
 	

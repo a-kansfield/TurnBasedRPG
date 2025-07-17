@@ -1,6 +1,6 @@
 extends Node
 
-var enemyData = preload("res://Data/EnemyData.tres")
+var enemyData = preload("res://Autoload/Data/EnemyData.tres")
 
 
 

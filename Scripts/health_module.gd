@@ -8,7 +8,7 @@ var currentHealth : int
 var healthChangeAnimScene = preload("res://Scenes/health_change_anim.tscn")
 
 func _ready():
-	SignalBus.changeEntityHealth.connect(changeHealth)
+	Battle_SB.changeEntityHealth.connect(changeHealth)
 	
 # Called via Signal. This function works for both attacking and healing. An attack should include a negative number, and a heal should include a positive one.
 func changeHealth(pos: int, amount : int):
@@ -20,11 +20,11 @@ func changeHealth(pos: int, amount : int):
 		if currentHealth <= 0:
 			currentHealth = 0
 			# Destroy parent
-			SignalBus.entityDestroyed.emit(get_parent().pos)
+			Battle_SB.entityDestroyed.emit(get_parent().pos)
 		else:
 			healthAnimation(amount)
 			
-			SignalBus.projectCurrentHealth.emit(pos, currentHealth)
+			Battle_SB.projectCurrentHealth.emit(pos, currentHealth)
 
 func healthAnimation(amount : int):
 	var inst = healthChangeAnimScene.instantiate()

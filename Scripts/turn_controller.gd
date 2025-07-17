@@ -17,11 +17,11 @@ var BATTLE
 
 func _init():
 	
-	SignalBus.battleVarsSet.connect(initializeBattleOrder)
-	SignalBus.battleInitComplete.connect(initializeBattleOrder)
-	SignalBus.entityDestroyed.connect(removeEntityFromTurnOrder)
-	SignalBus.playerEndTurn.connect(endPlayerTurn)
-	SignalBus.battleOver.connect(endBattle)
+	Battle_SB.battleVarsSet.connect(initializeBattleOrder)
+	Battle_SB.battleInitComplete.connect(initializeBattleOrder)
+	Battle_SB.entityDestroyed.connect(removeEntityFromTurnOrder)
+	Battle_SB.playerEndTurn.connect(endPlayerTurn)
+	Battle_SB.battleOver.connect(endBattle)
 	
 func _ready():
 	pass
@@ -106,11 +106,11 @@ func advanceTurn():
 	printCombatant(activeEntity)
 
 func playerTurn(activeCombatant):
-	SignalBus.playerTurn.emit(activeCombatant, BATTLE.activeEnemies)
+	Battle_SB.playerTurn.emit(activeCombatant, BATTLE.activeEnemies)
 	pass
 	
 func enemyTurn(activeCombatant):
-	SignalBus.enemyTurn.emit(activeCombatant, BATTLE.activePlayers)
+	Battle_SB.enemyTurn.emit(activeCombatant, BATTLE.activePlayers)
 	
 # Helper for first turn and advance turn. checks whether it is player or AI turn then sends out a signal accordingly
 func determineAffiliation(activeCombatant : Variant):
@@ -154,7 +154,7 @@ func removeEntityFromTurnOrder(removedEntityPos):
 				BATTLE.activeEnemies.remove_at(count)
 			count += 1
 			if BATTLE.activeEnemies.size() == 0:
-				SignalBus.battleOver.emit("Player")
+				Battle_SB.battleOver.emit("Player")
 				print("THEY DIED")
 
 
@@ -168,4 +168,5 @@ func _on_enemy_turn_timer_timeout():
 func endBattle(winner):
 	if winner == "Player":
 		get_tree().change_scene_to_file("res://Scenes/BattleEndScenes/battle_victory.tscn")
+		
 	

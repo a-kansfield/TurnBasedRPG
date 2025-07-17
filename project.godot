@@ -16,7 +16,7 @@ config/icon="res://Sprites/icon.svg"
 
 [autoload]
 
-SignalBus="*res://Autoload/SignalBus/signal_bus.gd"
+Battle_SB="*res://Autoload/SignalBus/battle_sb.gd"
 Globals="*res://Autoload/Globals/Globals.gd"
 
 [display]

@@ -3,7 +3,7 @@ extends Label
 var pos : int
 
 func _ready():
-	SignalBus.projectCurrentHealth.connect(setText)
+	Battle_SB.projectCurrentHealth.connect(setText)
 	
 func setText(pos: int, value: int):
 	if self.pos == pos:

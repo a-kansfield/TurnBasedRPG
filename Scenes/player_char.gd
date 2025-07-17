@@ -12,9 +12,9 @@ var tempTargetEnemyPos : int = -1
 
 func _init():
 	add_to_group("battlePlayers")
-	SignalBus.playerTurn.connect(playerTurnSetup)
-	SignalBus.playerAttack.connect(handlePlayerTarget)
-	SignalBus.entityDestroyed.connect(destroySelf)
+	Battle_SB.playerTurn.connect(playerTurnSetup)
+	Battle_SB.playerAttack.connect(handlePlayerTarget)
+	Battle_SB.entityDestroyed.connect(destroySelf)
 	
 func destroySelf(pos):
 	if self.pos == pos:
@@ -33,11 +33,11 @@ func handlePlayerTarget(targetEnemyPos):
 		
 func landHit():
 	print("Hit Landed")
-	SignalBus.changeEntityHealth.emit(tempTargetEnemyPos, -tempAttackStr)
+	Battle_SB.changeEntityHealth.emit(tempTargetEnemyPos, -tempAttackStr)
 	get_node("Timer").start()
 	pass
 
 
 func _on_timer_timeout():
-	SignalBus.playerEndTurn.emit()
+	Battle_SB.playerEndTurn.emit()
 	pass # Replace with function body.
