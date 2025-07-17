@@ -21,7 +21,7 @@ func _init():
 	SignalBus.battleInitComplete.connect(initializeBattleOrder)
 	SignalBus.entityDestroyed.connect(removeEntityFromTurnOrder)
 	SignalBus.playerEndTurn.connect(endPlayerTurn)
-
+	SignalBus.battleOver.connect(endBattle)
 	
 func _ready():
 	pass
@@ -154,6 +154,7 @@ func removeEntityFromTurnOrder(removedEntityPos):
 				BATTLE.activeEnemies.remove_at(count)
 			count += 1
 			if BATTLE.activeEnemies.size() == 0:
+				SignalBus.battleOver.emit("Player")
 				print("THEY DIED")
 
 
@@ -163,3 +164,8 @@ func endPlayerTurn():
 func _on_enemy_turn_timer_timeout():
 	advanceTurn()
 	pass # Replace with function body.
+
+func endBattle(winner):
+	if winner == "Player":
+		get_tree().change_scene_to_file("res://Scenes/BattleEndScenes/battle_victory.tscn")
+	

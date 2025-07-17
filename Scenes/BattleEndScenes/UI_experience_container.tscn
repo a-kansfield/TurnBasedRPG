@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpx457fgcgw30"]
+
+[sub_resource type="FontVariation" id="FontVariation_5638a"]
+
+[node name="ExperienceContainer" type="MarginContainer"]
+
+[node name="ExperienceVContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="CharacterName" type="Label" parent="ExperienceVContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_fonts/font = SubResource("FontVariation_5638a")
+theme_override_font_sizes/font_size = 22
+text = "Character Name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ExperienceVContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="NextLVL" type="Label" parent="ExperienceVContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("FontVariation_5638a")
+theme_override_font_sizes/font_size = 22
+text = "Next LVL:"
+
+[node name="NextLVLNum" type="Label" parent="ExperienceVContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("FontVariation_5638a")
+theme_override_font_sizes/font_size = 22
+text = "635"
