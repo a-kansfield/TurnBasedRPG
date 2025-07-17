@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://bna2bxm36xnri"]
+
+[sub_resource type="FontVariation" id="FontVariation_5638a"]
+
+[node name="ItemContainer" type="MarginContainer"]
+
+[node name="ItemVContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ItemName" type="Label" parent="ItemVContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = SubResource("FontVariation_5638a")
+theme_override_font_sizes/font_size = 22
+text = "Generic Item"
+
+[node name="ItemNum" type="Label" parent="ItemVContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = SubResource("FontVariation_5638a")
+theme_override_font_sizes/font_size = 22
+text = "x3"
